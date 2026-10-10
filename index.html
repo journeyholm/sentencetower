@@ -787,8 +787,11 @@ mark.d-good{background:rgba(63,191,106,.3);border-bottom:2px solid #2f9a55;borde
 @media (max-height:520px) and (orientation:landscape){
   .stage{height:160px}.choice{min-height:64px;padding-top:24px;padding-bottom:10px}.prompt{margin:8px 0 6px}
 }
+/* Many Windows PCs turn on "reduce motion" by default, so keep the game's animations playing at normal speed
+   and only calm the jolting effects: screen shake, wobbles and the camera zoom. */
 @media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.15s!important}
+  .stage.shake,.choice.wrong,.hero.stuck{animation:none!important}
+  .cam.push{transform:none!important}
 }
 @media print{
   body{background:#fff!important;color:#000}
@@ -1728,7 +1731,7 @@ function pfxLoop(now){
   requestAnimationFrame(pfxLoop);
   const dt = Math.min(.05, (now - (PFX.last || now)) / 1000); PFX.last = now;
   if(!$("#screen-game").classList.contains("active") || document.hidden) return;
-  if(!REDUCED) pfxAmbient(dt);
+  pfxAmbient(dt);
   const c = PFX.ctx; c.setTransform(PFX.dpr,0,0,PFX.dpr,0,0); c.clearRect(0,0,PFX.w,PFX.h);
   PFX.parts = PFX.parts.filter(p => (p.life += dt) < p.max && p.x > -80 && p.x < PFX.w + 80);
   for(const p of PFX.parts){
@@ -2260,7 +2263,7 @@ function climbCine(floor){
     const a0 = summit ? C.TOP - FH*(1 - .35/Math.PI) : (floor - 2) * FH;
     const thOf = a => Math.PI * (a - a0) / FH - Math.PI/2;
     const aS = a0 + FH*(.35/Math.PI), aE = a0 + FH*(1 - .35/Math.PI);
-    const T = REDUCED ? 1200 : summit ? 5200 : tierStart ? 6200 : Math.max(2700, 3500 - floor*16);
+    const T = summit ? 5200 : tierStart ? 6200 : Math.max(2700, 3500 - floor*16);
     const sFull = (C.H * .78) / (C.TOP + FH*2.2);
     const el = $("#cine"), floorEl = $("#cFloor"), title = $("#cTitle"), marker = $("#cMarker");
     const tier = summit ? 4 : tierOf(floor);
@@ -2295,7 +2298,7 @@ function climbCine(floor){
       const stepAlt = FH / C.STEPS, k = (aH - a0) / stepAlt, frac = k - Math.floor(k);
       const hFeet = a0 + Math.floor(k)*stepAlt + Math.sin(frac*Math.PI) * stepAlt * .5;
       const stepIdx = Math.floor(k);
-      if(stepIdx !== lastStep && p > 0 && p < 1){ lastStep = stepIdx; if(!REDUCED) sfx.step(stepIdx % 6); }
+      if(stepIdx !== lastStep && p > 0 && p < 1){ lastStep = stepIdx; sfx.step(stepIdx % 6); }
       const [hx] = P(C.R + C.SW*.5, hTh, aH);
 
       // camera
@@ -2321,7 +2324,7 @@ function climbCine(floor){
 
       // screen-space particles by altitude
       const fNow = cam.alt / FH + 1;
-      if(!REDUCED){
+      {
         if(fNow > 30 && fNow < 41 && Math.random() < dt*14) parts.push({x:Math.random()*C.W, y:C.H + 5, vx:(Math.random()-.5)*20, vy:-60 - Math.random()*80, life:0, max:3, r:1.5 + Math.random()*1.5, c:"255,140,50"});
         if(fNow > 43 && Math.random() < dt*10) parts.push({x:Math.random()*C.W, y:Math.random()*C.H, vx:0, vy:-5, life:0, max:1.2, r:1.5 + Math.random()*2, c:"255,220,120"});
       }
@@ -2928,7 +2931,7 @@ document.querySelectorAll(".choice, .door").forEach(el => {
   el.addEventListener("blur", () => lookAt(null));
 });
 setInterval(() => {
-  if(REDUCED || document.hidden || S.busy || hoverSide !== null || !$("#screen-game").classList.contains("active")) return;
+  if(document.hidden || S.busy || hoverSide !== null || !$("#screen-game").classList.contains("active")) return;
   const hero = $("#hero"); if(!hero.classList.contains("idle")) return;
   const r = Math.random(), idleFor = performance.now() - (S.floorStart || 0);
   if(idleFor > 8000 && r < .35) emote("🤔", "", 1800);
@@ -3165,7 +3168,6 @@ requestAnimationFrame(pfxLoop);
 /* ---------- title screen: the tower drifting in the background ---------- */
 const TB = { cv:null, ctx:null, run:false };
 function startTitleBg(){
-  if(REDUCED) return;
   TB.cv = TB.cv || $("#titleCanvas"); TB.ctx = TB.ctx || TB.cv.getContext("2d");
   C.cv = TB.cv; C.ctx = TB.ctx; cineSize();
   if(!TB.run){ TB.run = true; requestAnimationFrame(titleLoop); }
