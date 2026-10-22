@@ -29,15 +29,16 @@ body[data-world="5"]{--wall:#2e1631;--wall2:#1e0e21;--stone:#4e2d4c;--accent:#ff
 
 *{box-sizing:border-box}
 html,body{margin:0;height:100%}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 50% -10%, #2a2119 0%, var(--bg) 60%)}
 body{
-  background:radial-gradient(ellipse at 50% -10%, #2a2119 0%, var(--bg) 60%) fixed, var(--bg);
+  background:var(--bg);
   color:var(--ink); font-family:var(--body); line-height:1.45;
   -webkit-tap-highlight-color:transparent; overflow-x:hidden;
 }
 button{font:inherit;cursor:pointer;touch-action:manipulation}
 #screen-game .stage, .hud, .itembar, .cine, .shop-head, .tabs, .grid{-webkit-user-select:none;user-select:none}
 .load-err{max-width:560px;margin:40px auto;padding:18px 20px;border-radius:16px;background:#3a1410;border:2px solid #e2493b;color:#ffd9d3;line-height:1.5}
-#app{max-width:980px;margin:0 auto;padding:12px 16px calc(24px + env(safe-area-inset-bottom));min-height:100%}
+#app{max-width:980px;margin:0 auto;padding:12px max(16px, env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));min-height:100%}
 .screen{display:none}
 .screen.active{display:block;animation:fadeIn .35s ease}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
@@ -51,7 +52,7 @@ button{font:inherit;cursor:pointer;touch-action:manipulation}
 }
 .btn:active{transform:translateY(3px);box-shadow:0 1px 0 #9c6a0e,0 4px 10px rgba(0,0,0,.35)}
 .btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 2px rgba(244,234,210,.35)}
-.btn:focus-visible,.choice:focus-visible,input:focus-visible,.chip:focus-visible,.tile:focus-visible,.tab:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.btn:focus-visible,.choice:focus-visible,input:focus-visible,.chip:focus-visible,.tile:focus-visible,.tab:focus-visible,.mode-btn:focus-visible,.ptier:focus-visible,.icon-btn:focus-visible,.shop-x:focus-visible,.unlock-link:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 
 /* ---------- TITLE ---------- */
 #app{position:relative;z-index:1}
@@ -72,25 +73,26 @@ body.on-title .title-bg, body.on-title .title-shade{opacity:1}
 @keyframes logoShine{0%,100%{background-position:0 0}50%{background-position:100% 0}}
 .tagline{font-family:var(--display);color:#e9dcb8;font-size:clamp(1rem,2.8vw,1.25rem);margin:.7em 0 1.3em;letter-spacing:.05em;text-shadow:0 2px 8px #000}
 .name-card{background:linear-gradient(180deg,rgba(43,30,18,.88),rgba(24,17,10,.9));border:2px solid rgba(255,207,74,.45);border-radius:20px;padding:16px;
-  box-shadow:0 18px 40px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.08);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);text-align:left}
+  box-shadow:0 18px 40px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.08);text-align:left}
 .name-card label{display:block;font-family:var(--display);font-weight:900;color:var(--gold);margin:0 0 10px;font-size:1.05rem}
 .name-row{display:flex;gap:10px;flex-wrap:wrap}
 .name-row input{flex:1 1 200px;min-width:0;font:inherit;font-size:1.15rem;padding:.8em 1em;border-radius:12px;border:2px solid rgba(246,236,210,.3);background:rgba(0,0,0,.45);color:var(--ink)}
 .name-row input::placeholder{color:#9e9070}
 .name-row .btn{flex:1 0 auto;font-size:1.1rem}
-.btn.glow{animation:btnGlow 2.2s ease-in-out infinite}
-@keyframes btnGlow{50%{box-shadow:0 4px 0 #9c6a0e, 0 0 28px rgba(255,207,74,.65)}}
+.btn.glow{position:relative}
+.btn.glow::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;box-shadow:0 0 28px rgba(255,207,74,.65);opacity:0;animation:btnGlow 2.2s ease-in-out infinite}
+@keyframes btnGlow{50%{opacity:1}}
 .name-err{color:#ff9d8f;min-height:1.3em;margin-top:6px;font-size:.95rem}
 .t-steps{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px;text-align:left}
 @media (max-width:520px){.t-steps{grid-template-columns:1fr}}
 .step{display:flex;gap:12px;align-items:center;background:rgba(24,17,10,.8);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:12px;
-  -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+}
 .step .ic{font-size:1.5rem;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;flex:none;
   background:radial-gradient(circle at 40% 35%, rgba(255,207,74,.32), rgba(0,0,0,.25));border:1px solid rgba(255,207,74,.3)}
 .step b{display:block;color:#ffe7a3;font-size:.98rem}
 .step span{display:block;font-size:.86rem;color:var(--muted);line-height:1.35}
 .ladder{margin-top:18px;background:rgba(24,17,10,.8);border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:14px;text-align:left;
-  -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+}
 .ladder h2{font-family:var(--display);color:var(--gold);font-size:1.05rem;margin:0 0 10px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
 .ladder h2 small{font-family:var(--body);font-weight:400;color:var(--muted);font-size:.8rem}
 .tier-row{display:grid;grid-template-columns:34px 1fr auto;gap:10px;align-items:center;padding:8px 12px;margin:5px 0;border-radius:12px;
@@ -151,6 +153,7 @@ body.on-title .title-bg, body.on-title .title-shade{opacity:1}
 .rwin .stars{position:absolute;inset:0;opacity:0;background:
   radial-gradient(1.5px 1.5px at 20% 30%,#fff,transparent),radial-gradient(1px 1px at 70% 15%,#fff,transparent),
   radial-gradient(1.5px 1.5px at 45% 55%,#fff,transparent),radial-gradient(1px 1px at 80% 70%,#fff,transparent);animation:twinkle 2s infinite alternate}
+@keyframes twinkle{to{filter:brightness(.55)}}
 .rwin .hills{position:absolute;left:-20%;right:-20%;bottom:-4%;height:38%;opacity:0;
   background:radial-gradient(ellipse 60% 70% at 30% 100%, #3f8a3a 60%, transparent 61%),radial-gradient(ellipse 70% 60% at 85% 100%, #2f6e2c 60%, transparent 61%)}
 .rwin .cloudsea{position:absolute;left:-10%;right:-10%;bottom:-6%;height:34%;opacity:0;
@@ -229,7 +232,7 @@ body.on-title .title-bg, body.on-title .title-shade{opacity:1}
 .door .panel::before,.door .panel::after{content:"";position:absolute;left:0;right:0;height:7px;background:linear-gradient(#55524c,#2f2c28);box-shadow:0 1px 0 rgba(255,255,255,.12)}
 .door .panel::before{top:28%}.door .panel::after{bottom:16%}
 .door.open .panel{transform:perspective(500px) rotateY(-82deg)}
-.door:not(.open):hover .panel{filter:brightness(1.12)}
+@media (hover:hover){.door:not(.open):hover .panel{filter:brightness(1.12)}}
 .door .letter{position:absolute;top:-24px;left:50%;transform:translateX(-50%);z-index:3;width:32px;height:32px;border-radius:50%;
   display:grid;place-items:center;font-family:var(--display);font-weight:900;color:#2a1a05;background:radial-gradient(circle at 35% 30%,#fff1b0,#e6a823);
   box-shadow:0 2px 0 #7d520b,0 0 14px rgba(255,207,74,.55);font-size:1rem;border:2px solid #7d520b}
@@ -279,7 +282,7 @@ body.on-title .title-bg, body.on-title .title-shade{opacity:1}
 .cbar{position:absolute;left:0;right:0;height:0;background:#000;z-index:2;transition:height .45s ease}
 .cbar.top{top:0}.cbar.bot{bottom:0}
 .cine.bars .cbar{height:7vh}
-.c-floor{position:absolute;left:clamp(14px,4vw,40px);bottom:calc(7vh + 14px);z-index:3;font-family:var(--display);font-weight:900;color:var(--gold);
+.c-floor{position:absolute;left:max(clamp(14px,4vw,40px), env(safe-area-inset-left));bottom:calc(7vh + 14px);z-index:3;font-family:var(--display);font-weight:900;color:var(--gold);
   text-shadow:0 3px 0 #000,0 0 18px rgba(0,0,0,.9);line-height:1.05;opacity:0;transition:opacity .4s}
 .cine.bars .c-floor{opacity:1}
 .c-floor .small{display:block;font-size:clamp(.7rem,2.2vw,1rem);color:var(--ink);letter-spacing:.12em}
@@ -316,7 +319,7 @@ body.on-title .title-bg, body.on-title .title-shade{opacity:1}
 .choice{position:relative;text-align:left;border:0;border-radius:16px;padding:28px 16px 16px 58px;min-height:88px;
   background:linear-gradient(180deg,var(--parch),var(--parch2));color:var(--parch-ink);
   box-shadow:0 4px 0 #a88f5a, 0 10px 22px rgba(0,0,0,.35);transition:transform .12s, box-shadow .12s, filter .2s;display:flex;align-items:center}
-.choice:hover{transform:translateY(-2px)}
+@media (hover:hover){.choice:hover{transform:translateY(-2px)}}
 .choice:active{transform:translateY(2px);box-shadow:0 2px 0 #a88f5a,0 5px 12px rgba(0,0,0,.35)}
 .choice .tag{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:36px;height:36px;border-radius:50%;
   display:grid;place-items:center;font-family:var(--display);font-weight:900;background:#2a1d10;color:var(--gold);font-size:1.1rem}
@@ -333,7 +336,7 @@ body.on-title .title-bg, body.on-title .title-shade{opacity:1}
 @media (hover:none){.keys{display:none}}
 
 /* ---------- OVERLAYS ---------- */
-.overlay{position:fixed;inset:0;z-index:50;display:none;place-items:safe center;padding:16px;background:rgba(5,4,3,.82);backdrop-filter:blur(3px);overflow-y:auto}
+.overlay{position:fixed;inset:0;z-index:50;display:none;place-items:center;place-items:safe center;padding:16px;background:rgba(5,4,3,.88);overflow-y:auto}
 .overlay.show{display:grid;animation:fadeIn .3s}
 .card{width:min(560px,100%);border-radius:22px;padding:26px 22px;text-align:center;
   background:linear-gradient(180deg,var(--wall),var(--wall2));border:2px solid var(--accent);box-shadow:0 20px 60px rgba(0,0,0,.6), inset 0 0 40px rgba(0,0,0,.4)}
@@ -341,11 +344,22 @@ body.on-title .title-bg, body.on-title .title-shade{opacity:1}
 .card h2{font-family:var(--display);font-weight:900;font-size:clamp(1.6rem,6vw,2.4rem);margin:.15em 0;color:var(--gold)}
 .card .wskill{color:var(--ink);font-size:1.1rem;margin-bottom:14px}
 .card .wicon{font-size:3rem}
+.lock-card{background:linear-gradient(180deg,#2a2014,#15100a);border:2px solid var(--gold)}
+.lock-card .lock-text{overflow-wrap:anywhere;margin:.4em auto 14px;max-width:440px;color:var(--ink);line-height:1.5}
+.lock-card .lock-row{margin:0 auto;max-width:440px}
+.lock-card .lock-err{min-height:1.4em;margin:8px 0 4px;color:#ff9d8f;font-weight:700}
+.lock-card .lock-err.ok{color:#8fe3a6}
+.lock-card .row{flex-wrap:wrap}
+.lock-card .teacher{font-size:.85rem;color:var(--muted);margin:10px 0 0}
+a.btn{text-decoration:none}
+.unlock-link{display:block;margin:10px 0 0;padding:.5em .2em;border:0;background:none;color:var(--gold);font-size:.9rem;font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.unlock-link[hidden]{display:none}
+.ptier.locked{opacity:.6}
 .rankup{display:inline-block;margin:6px 0 18px;padding:.45em 1em;border-radius:99px;background:rgba(255,207,74,.15);border:1px solid var(--gold);color:#ffe7a3}
 .card .row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
 
 /* ---------- SHOP: the Tower Merchant ---------- */
-.shop{width:min(960px,100%);max-height:calc(100dvh - 24px);display:flex;flex-direction:column;border-radius:22px;overflow:hidden;position:relative;
+.shop{width:min(960px,100%);max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);display:flex;flex-direction:column;border-radius:22px;overflow:hidden;position:relative;
   background:
     radial-gradient(ellipse 55% 35% at 18% 0%, rgba(255,190,90,.2), transparent 70%),
     repeating-linear-gradient(90deg, rgba(0,0,0,.16) 0 2px, transparent 2px 140px),
@@ -423,7 +437,7 @@ body.on-title .title-bg, body.on-title .title-shade{opacity:1}
 .tile{--rg:154,163,173;position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;border-radius:14px;padding:22px 8px 9px;text-align:center;color:var(--ink);
   background:radial-gradient(ellipse 80% 55% at 50% 38%, rgba(var(--rg),.28), transparent 70%), linear-gradient(180deg,#33241a,#1c130c);
   border:2px solid rgba(var(--rg),.75);box-shadow:0 4px 0 rgba(0,0,0,.45), inset 0 0 18px rgba(0,0,0,.45);transition:transform .15s, box-shadow .15s, filter .2s;overflow:hidden}
-.tile:hover{transform:translateY(-3px);box-shadow:0 7px 0 rgba(0,0,0,.45), 0 0 18px rgba(var(--rg),.35), inset 0 0 18px rgba(0,0,0,.45)}
+@media (hover:hover){.tile:hover{transform:translateY(-3px);box-shadow:0 7px 0 rgba(0,0,0,.45), 0 0 18px rgba(var(--rg),.35), inset 0 0 18px rgba(0,0,0,.45)}}
 .tile.sel{transform:translateY(-3px);box-shadow:0 0 0 3px #ffcf4a, 0 0 26px rgba(255,207,74,.55), inset 0 0 18px rgba(0,0,0,.4)}
 .tile > *{flex-shrink:0}
 .tile .rar{position:absolute;top:0;left:0;right:0;padding:3px 0;font-size:.62rem;font-weight:900;letter-spacing:.14em;text-transform:uppercase;
@@ -440,6 +454,7 @@ body.on-title .title-bg, body.on-title .title-shade{opacity:1}
 .tile.poor .price{color:#ffb3a9}
 .tile.poor .art{filter:grayscale(.45) drop-shadow(0 4px 2px rgba(0,0,0,.5));opacity:.85}
 .tile .bag{position:absolute;top:24px;right:6px;font-size:.66rem;font-weight:900;background:#a98cff;color:#1a0f33;border-radius:99px;padding:.1em .5em}
+.tile.r-legendary .rar{color:#2a1a05;text-shadow:none}
 .tile.r-legendary::after{content:"";position:absolute;inset:0;pointer-events:none;
   background:linear-gradient(115deg, transparent 30%, rgba(255,230,150,.28) 45%, transparent 60%) -150% 0/250% 100% no-repeat;animation:shimmer 3.2s ease-in-out infinite}
 @keyframes shimmer{0%,40%{background-position:-150% 0}100%{background-position:150% 0}}
@@ -464,9 +479,15 @@ body.on-title .title-bg, body.on-title .title-shade{opacity:1}
 .d-btn:disabled{filter:grayscale(.8) brightness(.75);cursor:not-allowed;transform:none;box-shadow:0 2px 0 #5c4a2a}
 .d-btn.ghosty{background:linear-gradient(180deg,#5b4a35,#3d3020);color:#f4ead2;box-shadow:0 4px 0 #22190f}
 
-@media (min-width:701px){.shop{height:min(660px, calc(100dvh - 24px))}}
+@media (min-width:701px){.shop{height:min(660px, calc(100vh - 24px));height:min(660px, calc(100dvh - 24px))}}
+/* phones: the sign gets its own row so it can't cover the gold or the close button */
+@media (max-width:520px){
+  .shop-head{flex-wrap:wrap;justify-content:space-between;row-gap:14px;padding-top:22px}
+  .sign{order:-1;flex:1 0 100%}
+  .sign h2{font-size:1.05rem;padding:.3em .9em}
+}
 @media (max-width:700px){
-  .shop{max-height:calc(100dvh - 16px)}
+  .shop{max-height:calc(100vh - 16px);max-height:calc(100dvh - 16px)}
   .shop-body{grid-template-columns:1fr;grid-template-rows:auto 1fr;gap:10px;padding:2px 10px 10px}
   .dress{flex-direction:row;align-items:stretch;min-height:150px;max-height:170px}
   .merchant-row{flex-direction:column;width:58%;padding:22px 8px 8px;gap:4px}
@@ -559,7 +580,7 @@ body.on-title .title-bg, body.on-title .title-shade{opacity:1}
 .mini-tower::after{content:"👑";position:absolute;top:-34px;left:50%;transform:translateX(-50%);font-size:1.1rem}
 .mini-tower i{flex:1;border-radius:1px;background:var(--c);opacity:.22}
 .mini-tower i.done{opacity:1}
-.mini-tower i.fell{background:#e2493b;opacity:1;animation:fellBlink 1s ease-in-out infinite}
+.mini-tower i.fell{background:#e2493b;opacity:1;animation:fellBlink 1s ease-in-out 4}
 @keyframes fellBlink{50%{background:#ffb3a9}}
 .fellmark{position:absolute;left:calc(100% + 8px);transform:translateY(50%);font-size:.72rem;font-weight:900;white-space:nowrap;color:#a3221a;line-height:1.1}
 .fellmark::before{content:"◀ ";}
@@ -716,7 +737,8 @@ mark.d-good{background:rgba(63,191,106,.3);border-bottom:2px solid #2f9a55;borde
 .pill.combo.blaze{background:linear-gradient(90deg,#8a1a00,#c44a00);color:#fff;box-shadow:0 0 20px rgba(255,90,20,.9);animation:comboPulse .5s ease-in-out infinite alternate}
 @keyframes comboPulse{to{transform:scale(1.07)}}
 .ach-pop{position:fixed;top:14px;right:14px;z-index:90;display:flex;align-items:center;gap:12px;max-width:min(340px,calc(100vw - 28px));padding:10px 16px 10px 12px;border-radius:16px;
-  background:linear-gradient(180deg,#3b2a14,#1c1309);border:2px solid #ffcf4a;color:var(--ink);box-shadow:0 12px 30px rgba(0,0,0,.6),0 0 24px rgba(255,207,74,.35);animation:achIn .5s cubic-bezier(.3,1.5,.5,1)}
+  background:linear-gradient(180deg,#3b2a14,#1c1309);border:2px solid #ffcf4a;color:var(--ink);box-shadow:0 12px 30px rgba(0,0,0,.6),0 0 24px rgba(255,207,74,.35);animation:achIn .5s cubic-bezier(.3,1.5,.5,1);pointer-events:none}
+@media (max-width:600px){.ach-pop{top:auto;bottom:calc(14px + env(safe-area-inset-bottom))}}
 .ach-pop.out{animation:achOut .4s ease-in forwards}
 .ach-pop .ai{font-size:2rem;width:48px;height:48px;border-radius:12px;display:grid;place-items:center;background:radial-gradient(circle,rgba(255,207,74,.35),rgba(0,0,0,.2))}
 .ach-pop small{display:block;font-size:.68rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#ffcf4a}
@@ -725,7 +747,8 @@ mark.d-good{background:rgba(63,191,106,.3);border-bottom:2px solid #2f9a55;borde
 @keyframes achIn{from{opacity:0;transform:translateX(60px) scale(.9)}}
 @keyframes achOut{to{opacity:0;transform:translateX(60px)}}
 .achs{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
-.ach{display:flex;flex-direction:column;align-items:center;text-align:center;gap:2px;padding:10px 8px;border-radius:14px;background:rgba(42,29,16,.06);border:1px dashed rgba(42,29,16,.25);opacity:.55}
+.ach{display:flex;flex-direction:column;align-items:center;text-align:center;gap:2px;padding:10px 8px;border-radius:14px;background:rgba(42,29,16,.06);border:1px dashed rgba(42,29,16,.25)}
+.ach:not(.got) span{opacity:.45}
 .ach span{font-size:1.6rem;filter:grayscale(1)}
 .ach b{font-size:.82rem}.ach small{font-size:.7rem;color:#6b5634;line-height:1.25}
 .ach.got{opacity:1;background:linear-gradient(180deg,rgba(255,215,90,.35),rgba(255,215,90,.12));border:2px solid #c58f2a}
@@ -783,6 +806,13 @@ mark.d-good{background:rgba(63,191,106,.3);border-bottom:2px solid #2f9a55;borde
 @keyframes coin{to{transform:translateY(110vh) rotate(720deg)}}
 .cert{outline:6px double #9c6a0e;outline-offset:-14px}
 .cert .seal{font-size:3rem;text-align:center}
+.cert .meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:16px 0}
+.cert .meta>div{padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.4);border:1px solid rgba(42,29,16,.15);text-align:center}
+.cert .meta small{display:block;color:#7a6440;font-size:.7rem;text-transform:uppercase;letter-spacing:.07em;font-weight:700}
+.cert .meta strong{display:block;font-size:1.15rem}
+.skills{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+.skills li{display:flex;gap:10px;align-items:center;padding:8px 12px;border-radius:12px;background:rgba(255,255,255,.35);border:1px solid rgba(42,29,16,.15)}
+.skills li.done{background:rgba(63,191,106,.14)}
 
 @media (max-height:520px) and (orientation:landscape){
   .stage{height:160px}.choice{min-height:64px;padding-top:24px;padding-bottom:10px}.prompt{margin:8px 0 6px}
@@ -790,13 +820,15 @@ mark.d-good{background:rgba(63,191,106,.3);border-bottom:2px solid #2f9a55;borde
 /* Many Windows PCs turn on "reduce motion" by default, so keep the game's animations playing at normal speed
    and only calm the jolting effects: screen shake, wobbles and the camera zoom. */
 @media (prefers-reduced-motion:reduce){
-  .stage.shake,.choice.wrong,.hero.stuck{animation:none!important}
+  .stage.shake,.choice.wrong,.hero.stuck,.boss.hit,.boss.roar{animation:none!important}
   .cam.push{transform:none!important}
 }
 @media print{
   body{background:#fff!important;color:#000}
   #app{max-width:none;padding:0}
-  .screen:not(.active),.actions,.overlay,.coins,.hud,.stage,.summit,.cine{display:none!important}
+  .screen:not(.active),.actions,.overlay,.coins,.hud,.stage,.summit,.cine,.ach-pop,.flycoin,.burst{display:none!important}
+  .compare,.box,.rv,.r-hero,.lesson,.trapline,.ach,.seg,.stat,.cert .meta>div,.skills li{break-inside:avoid}
+  .report h2{break-after:avoid}
   .report{box-shadow:none;background:#fff!important;max-width:none}
   .title-bg,.title-shade,.rod{display:none!important}
   .scroll{filter:none;margin:0}
@@ -831,6 +863,7 @@ mark.d-good{background:rgba(63,191,106,.3);border-bottom:2px solid #2f9a55;borde
           <div class="ptiers" id="pTiers" hidden></div>
         </div>
         <div class="name-err" id="nameErr" role="alert"></div>
+        <button type="button" class="unlock-link" id="unlockLink" hidden>🔒 Free demo: floors 1–10 · Unlock the full tower</button>
       </form>
 
       <div class="t-steps">
@@ -846,7 +879,7 @@ mark.d-good{background:rgba(63,191,106,.3);border-bottom:2px solid #2f9a55;borde
         <div id="tierRows"></div>
       </div>
 
-      <p class="t-foot">🔄 Every climb starts fresh, with no accounts and nothing saved. When your climb ends, show your <b>Climb Report</b> to your teacher.</p>
+      <p class="t-foot">🔄 Every climb starts with 0 gold. No accounts needed. When your climb ends, show your <b>Climb Report</b> to your teacher.</p>
     </div>
   </section>
 
@@ -858,12 +891,12 @@ mark.d-good{background:rgba(63,191,106,.3);border-bottom:2px solid #2f9a55;borde
       <span class="pill" id="hudRank"></span>
       <span class="pill" id="hudGold">🪙 0</span>
       <span class="pill combo" id="hudCombo" title="Clean streak: floors in a row without magic items" hidden></span>
-      <button class="icon-btn" id="muteBtn" aria-label="Toggle sound">🔊</button>
+      <button class="icon-btn" id="muteBtn" aria-label="Mute sound" aria-pressed="false">🔊</button>
     </div>
     <div class="progress" id="progress"><i id="progFill"></i></div>
 
     <div class="stage" id="stage">
-      <div class="cam" id="cam">
+      <div class="cam" id="cam" aria-hidden="true">
       <div class="lightpool l"></div><div class="lightpool r"></div>
       <div class="rwin" id="rwin"><div class="sky"></div><div class="stars"></div><div class="hills"></div><div class="cloudsea"></div>
         <div class="cl" style="top:22%"></div><div class="cl" style="top:48%;animation-delay:-7s;animation-duration:18s"></div>
@@ -882,7 +915,7 @@ mark.d-good{background:rgba(63,191,106,.3);border-bottom:2px solid #2f9a55;borde
       <div class="floor-sign" id="floorSign">FLOOR 1</div>
       <div id="bossHud"></div>
       <canvas id="pfx"></canvas>
-      <div id="banners"></div>
+      <div id="banners" aria-hidden="true"></div>
       <div class="vignette"></div>
       <div class="toast" id="toast" role="status"></div>
     </div>
@@ -931,7 +964,7 @@ mark.d-good{background:rgba(63,191,106,.3);border-bottom:2px solid #2f9a55;borde
 </div>
 
 <!-- tier intro overlay -->
-<div class="overlay" id="worldOverlay" role="dialog" aria-modal="true" aria-labelledby="wName">
+<div class="overlay" id="worldOverlay" role="dialog" aria-modal="true" aria-labelledby="wName" aria-describedby="wNum wSkill wRank">
   <div class="card">
     <div class="wicon" id="wIcon"></div>
     <div class="wnum" id="wNum"></div>
@@ -942,6 +975,26 @@ mark.d-good{background:rgba(63,191,106,.3);border-bottom:2px solid #2f9a55;borde
       <button class="btn ghost" id="wShop">🛒 Shop</button>
       <button class="btn" id="wGo">Climb ➜</button>
     </div>
+  </div>
+</div>
+
+<!-- full-game lock -->
+<div class="overlay" id="lockOverlay" role="dialog" aria-modal="true" aria-labelledby="lockTitle">
+  <div class="card lock-card">
+    <div class="wicon">🔒</div>
+    <div class="wnum" id="lockKicker">FREE DEMO</div>
+    <h2 id="lockTitle">The rest of the tower is locked</h2>
+    <p class="lock-text" id="lockText"></p>
+    <form class="name-row lock-row" id="lockForm" autocomplete="off">
+      <input id="lockInput" type="password" placeholder="Enter the password" aria-label="Password" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go">
+      <button class="btn" type="submit" id="lockGo">Unlock 🔓</button>
+    </form>
+    <div class="lock-err" id="lockErr" role="alert"></div>
+    <div class="row">
+      <a class="btn ghost" id="lockBuy" href="https://www.teacherspayteachers.com/store/luke-holm" target="_blank" rel="noopener">🛒 Get the full game</a>
+      <button class="btn ghost" type="button" id="lockBack">🏠 Back to title</button>
+    </div>
+    <p class="teacher">Teachers: the password comes with the full game on Teachers Pay Teachers.</p>
   </div>
 </div>
 
@@ -991,6 +1044,7 @@ mark.d-good{background:rgba(63,191,106,.3);border-bottom:2px solid #2f9a55;borde
   </div>
 </div>
 <div class="coins" id="coins"></div>
+<div class="vh" id="srStatus" role="status" aria-live="polite"></div>
 
 <script>
 /* =====================================================================
@@ -1006,9 +1060,6 @@ mark.d-good{background:rgba(63,191,106,.3);border-bottom:2px solid #2f9a55;borde
      errorType   – a key from ERROR_TYPES below (drives the rule + fix tip)
      explanation – what exactly is wrong with THIS sentence
 
-   Teachers: you can edit any sentence here. Keep 4 pairs per floor.
-   (This section lives inside index.html, so the whole game is one file.
-   answer-key.html has its own copy; update both if you edit sentences.)
    ===================================================================== */
 
 const ERROR_TYPES = {
@@ -1050,12 +1101,12 @@ const ERROR_TYPES = {
   "frag-part": {
     name: "Fragment – participial phrase",
     rule: "A phrase like “Walking home” or “Covered in mud” describes someone, but it has no subject and no main verb.",
-    tip: "Connect it to a sentence: “Covered in mud, the dog ran inside.”"
+    tip: "Connect it to a sentence: “Soaked from the rain, the cat hid under the porch.”"
   },
   "frag-detail": {
     name: "Fragment – added-detail phrase",
     rule: "Phrases starting with such as, for example, especially, except, or like add details, but they cannot stand alone.",
-    tip: "Join it to the sentence it explains: “I love reading, especially on rainy days.”"
+    tip: "Join it to the sentence it explains: “We love the beach, especially in July.”"
   },
   "frag-pred": {
     name: "Fragment – detached verb phrase",
@@ -1070,7 +1121,7 @@ const ERROR_TYPES = {
   "splice": {
     name: "Comma splice",
     rule: "A comma by itself cannot join two complete sentences. Words like however, therefore, then, instead, and as a result are NOT joining words, so they do not fix a comma splice.",
-    tip: "Best fix: add a FANBOYS word after the comma (for, and, nor, but, or, yet, so): “I was tired, so I went to bed.” You can also use a period, or a semicolon for closely related ideas: “It rained; however, we played.”"
+    tip: "Best fix: add a FANBOYS word after the comma (for, and, nor, but, or, yet, so): “The store was closed, so we went home.” You can also use a period, or a semicolon for closely related ideas: “It rained; however, we played.”"
   },
   "sva": {
     name: "Subject–verb agreement",
@@ -1095,7 +1146,7 @@ const ERROR_TYPES = {
   "misplaced": {
     name: "Misplaced modifier",
     rule: "A describing phrase must sit next to the word it describes, or the sentence says something silly.",
-    tip: "Move the phrase: “The man in a tuxedo walked his dog.”"
+    tip: "Move the phrase next to what it describes: “The girl in the yellow raincoat walked her dog.”"
   },
   "parallel": {
     name: "Faulty parallelism",
@@ -1104,7 +1155,7 @@ const ERROR_TYPES = {
   },
   "case": {
     name: "Pronoun case",
-    rule: "Use subject pronouns (I, he, she, we, they, who) as subjects. Use object pronouns (me, him, her, us, them, whom) after verbs and prepositions.",
+    rule: "Use subject pronouns (I, he, she, we, they, who) as subjects. Use object pronouns (me, him, her, us, them, whom) after action verbs and prepositions.",
     tip: "Remove the other person and test it: “Me went to the store”? No → “I went.”"
   },
   "whowhom": {
@@ -1114,7 +1165,7 @@ const ERROR_TYPES = {
   },
   "compare": {
     name: "Illogical comparison",
-    rule: "Compare like with like: an essay to an essay, weather to weather—not an essay to a person. When comparing something to its own group, say “any OTHER.”",
+    rule: "Compare matching things: an essay to an essay, weather to weather—not an essay to a person. When comparing something to its own group, say “any OTHER.”",
     tip: "Add the missing piece: “longer than Sam’s,” “warmer than Chicago’s.”"
   },
   "punct": {
@@ -1129,17 +1180,20 @@ const ERROR_TYPES = {
   },
   "verbform": {
     name: "Wrong verb form",
-    rule: "Irregular verbs have special forms (ate/eaten, swam/swum, lie/lay/lain). In a past “if” clause, use had + verb, not would have.",
+    rule: "Irregular verbs have special forms (ate/eaten, swam/swum, lie/lay/lain). In a past “if” clause, use had + the past participle (had gone), not would have.",
     tip: "“have ate” → “have eaten”; “If you would have gone” → “If you had gone.”"
   },
   "subj": {
     name: "Subjunctive mood",
-    rule: "For wishes and unreal “if” situations, use were. After recommend, insist, demand, or essential that, use the plain base verb (rest, arrive, revise)—no -s.",
+    rule: "For wishes and unreal “if” situations, use were. After recommend, suggest, insist, demand, or essential that, use the plain base verb (rest, arrive, apologize, revise)—no -s.",
     tip: "“If I was taller” → “If I were taller”; “insisted that she revises” → “insisted that she revise.”"
   }
 };
 
 function P(c, w, t, why) { return { c: c, w: w, t: t, why: why }; }
+
+const LOCKED = "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";
+const LOCK_ITER = 300000;
 
 const WORLDS = [
   { name: "The Mossy Foundation", skill: "Sentence Basics",            rank: "Apprentice" },
@@ -1173,7 +1227,7 @@ const LEVELS = [
     P("The baby is sleeping.", "The baby sleeping.", "frag-ing", "“Sleeping” needs a helping verb: “is sleeping.”"),
     P("The boys are running to the bus.", "The boys running to the bus.", "frag-ing", "“Running” cannot be the verb alone. It needs “are.”"),
     P("My dad was cooking dinner.", "My dad cooking dinner.", "frag-ing", "“Cooking” needs a helper such as “was.”"),
-    P("The students took a test.", "The students taking a test.", "frag-ing", "“Taking” is an incomplete verb without “are” or “were.”")
+    P("The students took a test.", "The students taking a test.", "frag-ing", "“Taking” can’t be the verb by itself. It needs a helper (“were taking”) or a complete verb like “took.”")
   ]},
   { focus: "Where and when phrases", pairs: [
     P("A troll lived under the old bridge.", "Under the old bridge.", "frag-prep", "“Under the old bridge” tells where, but there is no subject or verb."),
@@ -1189,7 +1243,7 @@ const LEVELS = [
   ]},
   { focus: "“To” phrases", pairs: [
     P("To win the game, we practiced every day.", "To win the game.", "frag-inf", "Both start with “To win the game,” but only one adds a subject and main verb (“we practiced”). A “to” phrase can start a sentence, but it can’t be the whole sentence."),
-    P("She saved money to buy a bike.", "To buy a new bike.", "frag-inf", "Who wants to buy a bike? “To buy” is not a full verb."),
+    P("She saved money to buy a bike.", "To buy a new bike.", "frag-inf", "Who is buying a bike, and what happened? “To buy” is not a main verb, and there is no subject."),
     P("I need to finish my homework.", "To finish my homework before dinner.", "frag-inf", "This infinitive phrase has no subject and no main verb."),
     P("Lena wants to be a doctor.", "To be a doctor someday.", "frag-inf", "“To be” is not a main verb, and there is no subject.")
   ]},
@@ -1212,269 +1266,6 @@ const LEVELS = [
     P("It rained.", "The heavy rain falling on the roof all afternoon.", "frag-ing", "“Falling” has no helping verb. The short sentence is the complete one.")
   ]},
 
-  /* ============ WORLD 2: HIDDEN FRAGMENTS & RUN-ONS (11–20) ============ */
-  { focus: "“Because” fragments", pairs: [
-    P("Because the bus was late, I missed first period.", "Because the bus was late again this morning.", "frag-dep", "Starting with “Because” is fine, as long as a main clause follows. The correct one adds “I missed first period.” The other never says what happened."),
-    P("We stayed inside because it was raining.", "Because it had been raining hard since early that morning.", "frag-dep", "This is only the reason. The main idea is missing."),
-    P("Because I forgot my lunch, I bought a sandwich.", "Because I forgot my lunch and my water bottle at home.", "frag-dep", "Both start with “Because.” Only one finishes the thought with a main clause: “I bought a sandwich.”"),
-    P("The game was canceled because of the storm.", "Because the storm knocked out the power in the whole neighborhood.", "frag-dep", "It has a subject and verb, but “because” leaves the thought unfinished.")
-  ]},
-  { focus: "When, although, if, after", pairs: [
-    P("When the movie ended, everyone clapped.", "When the movie finally ended after nearly three hours.", "frag-dep", "“When the movie ended”… what happened? The main clause is missing."),
-    P("Although she studied for hours, she felt nervous.", "Although she studied for hours.", "frag-dep", "“Although” sets up a contrast, but the second half never comes."),
-    P("If you finish early, you may read.", "If you finish all of your work before the end of class.", "frag-dep", "An “if” clause needs a result: if you finish early, then what?"),
-    P("After we ate dinner, we walked the dog.", "After we ate dinner and washed the dishes.", "frag-dep", "Two actions inside the “after” clause, but still no main clause.")
-  ]},
-  { focus: "Who, which, and that", pairs: [
-    P("The clown slipped on a banana peel, which made everyone laugh.", "Which made everyone laugh.", "frag-rel", "“Which” can add information to a sentence, as in the correct one. Standing alone, “Which made everyone laugh” has nothing to describe and no main clause."),
-    P("The teacher gave us extra credit.", "The teacher who gave us extra credit.", "frag-rel", "“Gave” belongs to the “who” clause. The teacher never gets a main verb."),
-    P("My aunt, who lives in Texas, visited us.", "My aunt, who lives in Texas and loves horses.", "frag-rel", "Everything after “who” describes the aunt, but the aunt never does anything."),
-    P("I returned the book that I borrowed.", "The book that I borrowed from the library.", "frag-rel", "“That I borrowed” describes the book, but the book has no main verb.")
-  ]},
-  { focus: "Describing phrases", pairs: [
-    P("I walked home after practice in the rain.", "Walking home alone after a long practice in the pouring rain.", "frag-part", "Who is walking? There is no subject and no main verb."),
-    P("Tired from the long hike, we rested.", "Tired from the long hike up the hill.", "frag-part", "“Tired from the long hike” describes someone, but nobody is named and nothing happens."),
-    P("Fans waited, hoping to see the famous singer.", "Hoping to catch a glimpse of the famous singer outside the stadium.", "frag-part", "Who is hoping? This phrase has no subject or main verb."),
-    P("Covered in mud, the dog ran inside.", "Covered in mud from head to tail.", "frag-part", "What was covered in mud? The phrase has no subject or main verb.")
-  ]},
-  { focus: "Run-on sentences", pairs: [
-    P("I love pizza, and it is my favorite food.", "I love pizza it is my favorite food.", "runon", "Two complete sentences are fused with no punctuation: “I love pizza” + “it is my favorite food.” Join them with a comma + “and.”"),
-    P("The phone rang, but nobody answered it.", "The phone rang nobody answered it.", "runon", "“The phone rang” and “nobody answered it” are both complete. They need punctuation or a joining word."),
-    P("We missed the bus, so we walked.", "We missed the bus we had to walk to school.", "runon", "Two sentences run together with nothing separating them."),
-    P("My sister likes cats; I like dogs.", "My sister likes cats I like dogs.", "runon", "Two complete thoughts are jammed together. A comma + “but” would fix it, and so does a semicolon, as in the correct sentence.")
-  ]},
-  { focus: "Comma splices", pairs: [
-    P("I was tired, so I went to bed.", "I was tired, I went to bed.", "splice", "Two complete sentences joined by only a comma. Add a FANBOYS word: “I was tired, so I went to bed.”"),
-    P("The test was easy. I finished early.", "The test was easy, I finished early.", "splice", "“The test was easy” and “I finished early” are both sentences. A comma alone can’t join them. Use a period, or a comma + “so.”"),
-    P("It was cold outside, so we wore our coats.", "It was cold outside, we wore our coats.", "splice", "Two complete sentences joined only by a comma. Adding “so” after the comma fixes it."),
-    P("Max scored a goal, and the crowd cheered.", "Max scored a goal, the crowd cheered.", "splice", "Each half is a full sentence. A comma is too weak to hold them together by itself. Add “and.”")
-  ]},
-  { focus: "Sneaky comma splices", pairs: [
-    P("We finished the project, and then we celebrated.", "We finished the project, then we celebrated.", "splice", "“Then” is not a joining word. Without “and,” this is a comma splice."),
-    P("Leo is my best friend, and he lives next door.", "Leo is my best friend, he lives next door.", "splice", "“He lives next door” is a complete sentence spliced on with only a comma. Add “and” after the comma."),
-    P("The library was closed, but it reopens on Monday.", "The library was closed, it reopens on Monday.", "splice", "“It reopens on Monday” can stand alone, so it can’t be attached with just a comma. Add “but.”"),
-    P("The puppy chewed my shoe, which was brand new.", "The puppy chewed my shoe, it was brand new.", "splice", "“It was brand new” is a full sentence. “Which” would make it a describing clause instead.")
-  ]},
-  { focus: "Examples and extra details", pairs: [
-    P("I enjoy fruits such as apples and oranges.", "Such as apples, oranges, bananas, and juicy red grapes.", "frag-detail", "“Such as” introduces examples, but examples of what? No subject or verb."),
-    P("Especially on rainy days, I love reading.", "Especially on rainy days.", "frag-detail", "Both start with “Especially on rainy days,” but only one adds the main idea: “I love reading.”"),
-    P("Everyone came except Tom.", "Except for Tom and his cousin.", "frag-detail", "“Except for…” needs a sentence to attach to."),
-    P("For example, eagles and hawks hunt during the day.", "For example, eagles and hawks.", "frag-detail", "“For example” can begin a sentence, but a sentence still needs a verb. Only the correct one says what eagles and hawks DO: hunt.")
-  ]},
-  { focus: "Lost verb phrases", pairs: [
-    P("She grabbed her coat and left without saying goodbye.", "And then left without saying goodbye.", "frag-pred", "Who left? This verb phrase has lost its subject."),
-    P("Marcus fixed the bike and rode it to school.", "But forgot to bring the lock and had to walk it home.", "frag-pred", "Who forgot? There is no subject."),
-    P("Ana also plays the trumpet in the band.", "Also plays the trumpet and the drums in the school band.", "frag-pred", "There is a verb, but no one is doing it."),
-    P("We cleaned the garage and swept the porch.", "And then swept the front porch too.", "frag-pred", "Starts with “And then,” but no subject ever appears.")
-  ]},
-  { focus: "BOSS: Long dependent fragments", pairs: [
-    P("Since the day my grandfather planted it in our backyard, the oak tree has grown taller than our house.", "Since the day my grandfather planted the oak tree in our backyard over thirty years ago.", "frag-dep", "Both are long, and both start with “Since.” Only the correct one reaches a main clause: “the oak tree has grown taller than our house.”"),
-    P("While the rest of the class worked quietly on their essays, Ms. Diaz graded papers.", "While the rest of the class worked quietly on their essays at the back of the room.", "frag-dep", "“While” makes a clause dependent. The correct one adds the main clause “Ms. Diaz graded papers.” The other just keeps adding details."),
-    P("Even though we practiced, we lost.", "Even though the team had practiced every single afternoon for a month.", "frag-dep", "Long and detailed, but it’s only the “even though” half. The result is missing."),
-    P("Unless you return the library books by Friday afternoon, you will owe a fine.", "Unless you return the library books by Friday afternoon.", "frag-dep", "Unless you return them… then what? Only the correct one gives the result: “you will owe a fine.”")
-  ]},
-
-  /* ============== WORLD 3: AGREEMENT & JOINING (21–30) ============== */
-  { focus: "However, therefore, instead", pairs: [
-    P("It rained; however, we still played.", "It rained, however, we still played.", "splice", "“However” is not a joining word. Two complete sentences joined by commas make a comma splice. Use a semicolon before “however,” or rewrite it: “It rained, but we still played.”"),
-    P("I studied hard, so I passed the test.", "I studied hard, therefore, I passed the test.", "splice", "“Therefore” is not a joining word, so this is a comma splice. Swap it for a FANBOYS word: “I studied hard, so I passed.” (A semicolon also works: “hard; therefore, I passed.”)"),
-    P("The store was closed. Instead, we went home.", "The store was closed, instead, we went home.", "splice", "“Instead” is an adverb, not a joining word. This is a comma splice."),
-    P("Kim was sick, so she missed the play.", "Kim was sick, as a result, she missed the play.", "splice", "“As a result” doesn’t join clauses, so this is a comma splice. Use “so” instead—or a semicolon before “as a result.”")
-  ]},
-  { focus: "However in the middle", pairs: [
-    P("We, however, stayed until the end.", "We left early, however, they stayed until the end.", "splice", "In the correct sentence, “however” interrupts ONE clause. In the wrong one, it sits between TWO complete sentences—a comma splice."),
-    P("Most students finished early; Jordan, however, needed more time.", "Most students finished early, Jordan, however, needed more time.", "splice", "“Most students finished early” and “Jordan needed more time” are both complete. A comma can’t join them."),
-    P("The plan, therefore, needs to change.", "The plan failed, therefore, it needs to change.", "splice", "“The plan failed” and “it needs to change” are two sentences joined by commas."),
-    P("I wanted to go, but I stayed home.", "I wanted to go, nevertheless, I stayed home.", "splice", "“Nevertheless” is not a joining word, so this is a comma splice. Use a comma + “but” (or a semicolon before “nevertheless”).")
-  ]},
-  { focus: "Agreement with phrases in between", pairs: [
-    P("The box of old toys is in the attic.", "The box of old toys are in the attic.", "sva", "The subject is “box” (singular), not “toys.” Box is → “The box is.”"),
-    P("The students in the back row are talking.", "The students in the back row is talking.", "sva", "The subject is “students” (plural), so the verb must be “are.”"),
-    P("The color of the leaves changes in fall.", "The color of the leaves change in fall.", "sva", "The subject is “color” (singular). The color changes."),
-    P("A bouquet of roses sits on the table.", "A bouquet of roses sit on the table.", "sva", "The subject is “bouquet” (singular), so it sits.")
-  ]},
-  { focus: "Compound subjects", pairs: [
-    P("My brother and sister are coming.", "My brother and sister is coming.", "sva", "Two people joined by “and” make a plural subject. They are coming."),
-    P("Math and science come easily to me.", "Math and science comes easily to me.", "sva", "“Math and science” are two subjects joined by “and,” so the verb is plural: they come."),
-    P("The coach and the players were ready.", "The coach and the players was ready.", "sva", "“The coach and the players” is plural. They were ready."),
-    P("Running and swimming help you stay fit.", "Running and swimming helps you stay fit.", "sva", "Two activities joined by “and” are plural: they help.")
-  ]},
-  { focus: "Everyone, each, neither", pairs: [
-    P("Everyone in the class has a pencil.", "Everyone in the class have a pencil.", "sva", "“Everyone” is singular. Everyone has."),
-    P("Each of the boys plays an instrument.", "Each of the boys play an instrument.", "sva", "The subject is “each” (singular), not “boys.” Each plays."),
-    P("Nobody in my family likes olives.", "Nobody in my family like olives.", "sva", "“Nobody” is singular (not one person). Ignore “in my family”: nobody likes."),
-    P("Somebody always leaves the lights on.", "Somebody always leave the lights on.", "sva", "“Somebody” is singular. Somebody leaves.")
-  ]},
-  { focus: "Either/or and neither/nor", pairs: [
-    P("Either the dogs or the cat is making that noise.", "Either the dogs or the cat are making that noise.", "sva", "With or/nor, the verb matches the CLOSER subject: “the cat” is singular, so “is.”"),
-    P("Neither the teacher nor the students were ready.", "Neither the teacher nor the students was ready.", "sva", "The closer subject is “students” (plural), so the verb is “were.”"),
-    P("Either my parents or my aunt drives me to school.", "Either my parents or my aunt drive me to school.", "sva", "The closer subject is “aunt” (singular): my aunt drives."),
-    P("Neither Sam nor his friends know the answer.", "Neither Sam nor his friends knows the answer.", "sva", "The closer subject is “friends” (plural): friends know.")
-  ]},
-  { focus: "Verb before subject", pairs: [
-    P("There are three apples on the counter.", "There is three apples on the counter.", "sva", "“There” is not the subject. The subject is “apples” (plural), so “are.”"),
-    P("Here are your tickets.", "Here is your tickets.", "sva", "The subject is “tickets” (plural). Here are your tickets."),
-    P("On the shelf sit two old trophies.", "On the shelf sits two old trophies.", "sva", "The subject comes after the verb: “two old trophies” (plural) sit."),
-    P("Where are my keys?", "Where is my keys?", "sva", "The subject is “keys” (plural): where are my keys?")
-  ]},
-  { focus: "Pronouns that match (from far away)", pairs: [
-    P("The museum showed us dinosaur bones and explained where scientists had found them.", "The museum showed us dinosaur bones and explained where scientists had found it.", "pa", "What did scientists find? The “bones” (plural), not the museum. The pronoun must be “them.”"),
-    P("When the bakery's ovens broke, the owner had them repaired.", "When the bakery's ovens broke, the owner had it repaired.", "pa", "What was repaired? The “ovens” (plural). Don’t be fooled by the singular “bakery.” Use “them.”"),
-    P("The library's new computers are fast, but students can't use them until Monday.", "The library's new computers are fast, but students can't use it until Monday.", "pa", "Students will use the computers (plural), not the library. The pronoun must be “them.”"),
-    P("Neither the coach nor the players forgot their uniforms.", "Neither the coach nor the players forgot his uniform.", "pa", "With neither/nor, the pronoun matches the closer noun. “Players” is plural, so it must be “their uniforms.”")
-  ]},
-  { focus: "Keep your tense steady", pairs: [
-    P("She opened the door and walked in.", "She opened the door and walks in.", "tense", "“Opened” is past, but “walks” jumps to present."),
-    P("Yesterday, we went to the museum and saw dinosaurs.", "Yesterday, we go to the museum and saw dinosaurs.", "tense", "“Yesterday” is past, so “go” must be “went.”"),
-    P("The dog barks whenever the mail carrier arrives.", "The dog barks whenever the mail carrier arrived.", "tense", "This is a repeated present habit. “Arrived” shifts to the past for no reason."),
-    P("I was reading when the power went out.", "I was reading when the power goes out.", "tense", "The story is in the past, but “goes” is present.")
-  ]},
-  { focus: "BOSS: Agreement traps", pairs: [
-    P("The quality of the apples was excellent.", "The quality of the apples were excellent.", "sva", "The subject is “quality” (singular), not “apples.” The quality was."),
-    P("One of my friends has a pet snake.", "One of my friends have a pet snake.", "sva", "The subject is “one,” not “friends.” One has."),
-    P("The coach, along with the players, is celebrating.", "The coach, along with the players, are celebrating.", "sva", "“Along with the players” is extra information. The subject is “coach” (singular): the coach is."),
-    P("The results of the survey surprise everyone.", "The results of the survey surprises everyone.", "sva", "The subject is “results” (plural), not “survey.” The results surprise.")
-  ]},
-
-  /* ============== WORLD 4: SENTENCE STRUCTURE (31–40) ============== */
-  { focus: "Dangling modifiers", pairs: [
-    P("Walking to school, I got soaked by the rain.", "Walking to school, the rain soaked me.", "dangling", "This says the RAIN was walking to school. The walker (I) must come right after the comma."),
-    P("After finishing my homework, I turned on the TV.", "After finishing my homework, the TV seemed like a good idea.", "dangling", "This says the TV finished the homework. The person who finished must follow the comma."),
-    P("Running down the hall, I felt my backpack fall open.", "Running down the hall, my backpack fell open.", "dangling", "This says the backpack was running down the hall."),
-    P("When I was five, my family moved to Ohio.", "At the age of five, my family moved to Ohio.", "dangling", "This says the whole family was five years old.")
-  ]},
-  { focus: "Misplaced modifiers", pairs: [
-    P("Driving home from school, I saw a deer.", "I saw a deer driving home from school.", "misplaced", "Placed next to “deer,” the phrase says the DEER was driving home from school."),
-    P("The man in a tuxedo walked his dog.", "The man walked his dog in a tuxedo.", "misplaced", "“In a tuxedo” sits next to “dog,” so the dog is wearing the tuxedo."),
-    P("We bought my sister a puppy with floppy ears.", "We bought a puppy for my sister with floppy ears.", "misplaced", "“With floppy ears” now describes your sister, not the puppy."),
-    P("My grandma gave the neighbors a cake covered in frosting.", "My grandma gave a cake to the neighbors covered in frosting.", "misplaced", "“Covered in frosting” describes the neighbors instead of the cake.")
-  ]},
-  { focus: "Lists that match", pairs: [
-    P("I like hiking, swimming, and riding bikes.", "I like hiking, swimming, and to ride bikes.", "parallel", "“Hiking, swimming” are -ing words, so the third must be “riding,” not “to ride.”"),
-    P("The coach told us to stretch, drink water, and get some rest.", "The coach told us to stretch, drink water, and that we should rest.", "parallel", "The first two items are verbs; the last switches to a “that” clause."),
-    P("She is smart, kind, and hardworking.", "She is smart, kind, and works hard.", "parallel", "“Smart, kind” are adjectives, but “works hard” is a verb phrase. Use “hardworking.”"),
-    P("The recipe was quick, easy, and delicious.", "The recipe was quick, easy, and it tasted delicious.", "parallel", "Two adjectives, then a whole clause. Keep it “quick, easy, and delicious.”")
-  ]},
-  { focus: "Paired words that match", pairs: [
-    P("She plays not only piano but also violin.", "She not only plays piano but also the violin.", "parallel", "“Not only” is followed by a verb (plays), but “but also” is followed by a noun (the violin). The parts must match."),
-    P("You can either call me or send a text.", "You can either call me or you can send a text.", "parallel", "After “either” comes a verb phrase (call me), so after “or” must come a matching verb phrase (send a text), not a whole new clause (you can send…)."),
-    P("I would rather walk than ride the bus.", "I would rather walk than riding the bus.", "parallel", "“Walk” and “riding” don’t match. It should be “walk than ride.”"),
-    P("The trip was both exciting and educational.", "The trip was both exciting and taught us a lot.", "parallel", "“Both exciting” (adjective) must pair with another adjective, not a verb phrase.")
-  ]},
-  { focus: "I or me? He or him?", pairs: [
-    P("Jordan and I went to the store.", "Jordan and me went to the store.", "case", "Remove “Jordan and”: “Me went to the store” is wrong. Subjects use “I.”"),
-    P("The teacher gave the award to Maya and me.", "The teacher gave the award to Maya and I.", "case", "After “to,” use the object pronoun: “gave the award to me.”"),
-    P("Between you and me, the test was easy.", "Between you and I, the test was easy.", "case", "“Between” is a preposition, so it takes object pronouns: between you and me."),
-    P("He and his cousin built a treehouse.", "Him and his cousin built a treehouse.", "case", "Test it: “Him built a treehouse” is wrong. Subjects use “he.”")
-  ]},
-  { focus: "Who or whom?", pairs: [
-    P("Who left the door open?", "Whom left the door open?", "whowhom", "The question asks for the subject (HE left it open), so use “who.”"),
-    P("To whom did you give the letter?", "To who did you give the letter?", "whowhom", "After the preposition “to,” use the object form: you gave it to HIM → whom."),
-    P("She is the student whom everyone admires.", "She is the student who everyone admires.", "whowhom", "Inside the clause: everyone admires HER → object → “whom.”"),
-    P("The boy who won the race is my cousin.", "The boy whom won the race is my cousin.", "whowhom", "HE won the race, so the subject form “who” is needed.")
-  ]},
-  { focus: "Compare like with like", pairs: [
-    P("My essay was longer than Sam's.", "My essay was longer than Sam.", "compare", "This compares an essay to a person. It should be “Sam’s” (Sam’s essay)."),
-    P("Mount Everest is taller than any other mountain.", "Mount Everest is taller than any mountain.", "compare", "Everest IS a mountain, so it can’t be taller than itself. Use “any other.”"),
-    P("The weather in Miami is warmer than the weather in Chicago.", "The weather in Miami is warmer than Chicago.", "compare", "This compares weather to a city. Compare weather to weather."),
-    P("Her grades are better than those of her brother.", "Her grades are better than her brother.", "compare", "This compares grades to a person. It should be “her brother’s” or “those of her brother.”")
-  ]},
-  { focus: "Semicolons and colons", pairs: [
-    P("Although it was late, we kept working.", "Although it was late; we kept working.", "punct", "“Although it was late” is a fragment, so it can’t sit before a semicolon. Use a comma."),
-    P("I need three things: a pen, paper, and glue.", "I need: a pen, paper, and glue.", "punct", "“I need” is not a complete sentence. A colon can’t split a verb from its objects."),
-    P("We went to the beach; the water was cold.", "We went to the beach; even though the water was cold.", "punct", "The part after the semicolon is a dependent clause, not a complete sentence."),
-    P("My favorite subjects are math, science, and art.", "My favorite subjects are: math, science, and art.", "punct", "A colon cannot come between a verb (are) and the words that complete it.")
-  ]},
-  { focus: "Tricky verb forms", pairs: [
-    P("I have already eaten lunch.", "I have already ate lunch.", "verbform", "After “have,” use the past participle: eaten, not ate."),
-    P("She had swum across the lake by noon.", "She had swam across the lake by noon.", "verbform", "Swim, swam, swum. After “had,” use “swum.”"),
-    P("The sun rose over the hills.", "The sun raised over the hills.", "verbform", "“Raise” needs an object (raise your hand). The sun RISES by itself, so the past is “rose.”"),
-    P("He lay down on the couch after school.", "He laid down on the couch after school.", "verbform", "“Lie” (recline) has the past tense “lay.” “Laid” means placed something: “He laid the book down.”")
-  ]},
-  { focus: "BOSS: Structure gauntlet", pairs: [
-    P("Having lost the map, the hikers turned back.", "Having lost the map, the trail seemed impossible to find.", "dangling", "This says the TRAIL lost the map. The hikers must follow the comma."),
-    P("The new rules are fair, clear, and easy to follow.", "The new rules are fair, clear, and they are easy to follow.", "parallel", "Two adjectives, then a whole new clause. The list items must match."),
-    P("The coach chose Ava and me as captains.", "The coach chose Ava and I as captains.", "case", "“Chose” needs an object pronoun: “chose me,” so “chose Ava and me.”"),
-    P("If you had gone to the party, you would have seen her.", "If you would have gone to the party, you would have seen her.", "verbform", "In a past “if” clause, use “had gone,” not “would have gone.”")
-  ]},
-
-  /* ===================== WORLD 5: MASTERY (41–50) ===================== */
-  { focus: "Long fragments in disguise", pairs: [
-    P("The scientist discovered that the samples, which had been stored improperly for months, were contaminated.",
-      "The scientist who discovered that the samples, which had been stored improperly for months, were contaminated.",
-      "frag-rel", "“Who discovered…” turns everything into a description of the scientist. “Were contaminated” belongs to the samples, so the scientist never gets a main verb. One word—“who”—breaks the sentence."),
-    P("The new library, which took the city three years to build, finally opened downtown.",
-      "The new library, which the city spent nearly three years designing and building in the middle of downtown.",
-      "frag-rel", "Every verb is inside the “which” clause. The library itself never gets a main verb."),
-    P("Remember that the final project, including the bibliography and the slides, is due Friday.",
-      "A reminder to all students that the final project, including the bibliography and the slides, is due Friday.",
-      "frag-noun", "“Is due” belongs to the “that” clause. The main subject, “A reminder,” has no verb. The correct one is a command (you remember)."),
-    P("Our coach, a former Olympic swimmer, still trains in the pool every morning before the sun comes up.",
-      "Our coach, a former Olympic swimmer who still trains every morning before the sun comes up.",
-      "frag-rel", "“Trains” and “comes” are both inside the “who” clause describing the swimmer. “Our coach” has no main verb.")
-  ]},
-  { focus: "Complete sentences that look strange", pairs: [
-    P("Seldom have I seen such a fierce storm roll in so quickly.", "Such a storm, seldom seen before by anyone in our town.", "frag-noun", "The correct sentence is just inverted: “I have seldom seen such a fierce storm roll in.” The other has no main verb—“seen” is only describing the storm."),
-    P("Down the hill rolled the runaway cart.", "Down the hill, the runaway cart rolling faster and faster.", "frag-ing", "The correct sentence is inverted: “The cart rolled down the hill.” The other has “rolling” with no helping verb."),
-    P("Gone are the days when everyone had to wait for dial-up internet.", "The days of dial-up internet, long gone and mostly forgotten.", "frag-noun", "The correct sentence is inverted: “The days… are gone.” The other has no main verb at all."),
-    P("Only then did we understand the problem.", "Only then, after the teacher had explained the problem twice.", "frag-dep", "The correct sentence is inverted: “We understood the problem only then.” The other is only a time phrase and an “after” clause—no main clause.")
-  ]},
-  { focus: "Wishes and demands (subjunctive)", pairs: [
-    P("If I were taller, I would play basketball.", "If I was taller, I would play basketball.", "subj", "This is an unreal situation (you aren’t taller), so formal grammar uses “were.”"),
-    P("The doctor recommended that he rest for a week.", "The doctor recommended that he rests for a week.", "subj", "After “recommended that,” use the base verb: “that he rest,” not “rests.”"),
-    P("It is essential that every student arrive on time.", "It is essential that every student arrives on time.", "subj", "After “essential that,” use the base verb: “arrive.”"),
-    P("I suggest that he apologize to his sister.", "I suggest that he apologizes to his sister.", "subj", "After “suggest that,” formal English uses the plain base verb: “that he apologize,” not “apologizes.”")
-  ]},
-  { focus: "Agreement at the expert level", pairs: [
-    P("The number of students in the club has doubled.", "The number of students in the club have doubled.", "sva", "“THE number” is one number—singular. The number has doubled."),
-    P("A number of students have joined the club.", "A number of students has joined the club.", "sva", "“A number of” means “many,” so it is plural: students have joined."),
-    P("Mathematics is my most challenging subject.", "Mathematics are my most challenging subject.", "sva", "“Mathematics” ends in -s but names one subject. It is singular."),
-    P("Every one of the paintings in the gallery has a story.", "Every one of the paintings in the gallery have a story.", "sva", "The subject is “every one” (singular), not “paintings.”")
-  ]},
-  { focus: "Expert pronoun case", pairs: [
-    P("We students voted for a longer lunch.", "Us students voted for a longer lunch.", "case", "Remove “students”: “Us voted” is wrong. The subject form is “we.”"),
-    P("Give the extra tickets to whoever wants them.", "Give the extra tickets to whomever wants them.", "whowhom", "It looks like “to” needs “whomever,” but inside the clause, “whoever” is the subject of “wants.” (HE wants them.)"),
-    P("The coach praised us players for our effort.", "The coach praised we players for our effort.", "case", "Remove “players”: “praised we” is wrong. The object form is “us.”"),
-    P("Invite whomever you like.", "Invite whoever you like.", "whowhom", "In formal English, look inside the clause: “you like HIM,” so it is the object of “like.” Use “whomever.”")
-  ]},
-  { focus: "Expert dangling modifiers", pairs: [
-    P("When I was a child, my mother read to me every night.", "As a child, my mother read to me every night.", "dangling", "“As a child” attaches to “my mother,” saying your mother was the child."),
-    P("Exhausted after the marathon, I could barely move my legs.", "Exhausted after the marathon, my legs could barely move.", "dangling", "Legs don’t get exhausted from a marathon—the runner does. The runner must follow the comma."),
-    P("To make the team, you must practice every day.", "To make the team, daily practice becomes essential.", "dangling", "“Daily practice” isn’t trying to make the team. The person must follow the comma."),
-    P("Upon entering the classroom, we smelled popcorn.", "Upon entering the classroom, the smell of popcorn surprised us.", "dangling", "This says the SMELL entered the classroom.")
-  ]},
-  { focus: "Expert parallelism and comparison", pairs: [
-    P("Her painting is as good as, if not better than, mine.", "Her painting is as good, if not better than, mine.", "parallel", "Without the second “as,” it reads “as good… mine,” which is incomplete. You need “as good AS.”"),
-    P("The goal is not to win but to learn.", "The goal is not to win but learning.", "parallel", "“Not to win” must pair with “to learn,” not “learning.”"),
-    P("Reading builds vocabulary more than watching TV does.", "Reading builds vocabulary more than to watch TV.", "parallel", "“Reading” must be compared with “watching,” not “to watch.”"),
-    P("Her phone's battery lasts longer than mine.", "Her phone's battery lasts longer than me.", "compare", "This compares a battery to a person. “Mine” means “my battery.”")
-  ]},
-  { focus: "One comma makes the difference", pairs: [
-    P("The students who finished early went outside.", "The students who finished early, went outside.", "comma", "The comma splits the subject (“the students who finished early”) from its verb (“went”)."),
-    P("Sam, my lab partner, forgot his goggles.", "Sam my lab partner, forgot his goggles.", "comma", "Extra information needs commas on BOTH sides. With only one, the comma cuts the subject off from its verb."),
-    P("The old, creaky stairs led to the attic.", "The old, creaky stairs, led to the attic.", "comma", "The second comma separates the subject “stairs” from its verb “led.”"),
-    P("My grandmother, who turned ninety last week, still drives.", "My grandmother who turned ninety last week, still drives.", "comma", "The “who” clause needs a comma on both sides. One comma alone splits the subject from “drives.”")
-  ]},
-  { focus: "Sentences that trick the brain", pairs: [
-    P("The old man the boats.", "The old men on the boats.", "frag-noun", "Surprise! “The old” means old people, and “man” is a verb meaning “to staff.” Old people staff the boats—complete! The other has no verb."),
-    P("The complex houses married and single soldiers.", "The complex housing married and single soldiers.", "frag-ing", "“The complex” is a building and “houses” is the verb (gives homes to). The other uses “housing” without a helping verb."),
-    P("The cotton that clothing is made of grows in Mississippi.", "The cotton that clothing is made of, grown in Mississippi.", "frag-noun", "In the correct one, “grows” is the main verb for “cotton.” In the other, “grown” only describes the cotton, so there’s no main verb."),
-    P("What she said at the meeting yesterday surprised everyone.", "What she said to everyone at the meeting yesterday.", "frag-dep", "“What she said…” can be the subject of a sentence, but it still needs a main verb. Only the correct one has one: “surprised.”")
-  ]},
-  { focus: "FINAL BOSS: The Grammar Master", pairs: [
-    P("That the experiment failed a third time, despite every precaution, surprised no one.",
-      "The fact that the experiment, despite every precaution the researchers had taken, failed for a third time.",
-      "frag-noun", "“Failed” belongs to the “that” clause. The main subject, “The fact,” never gets a verb. In the correct one, the whole “That…” clause is the subject of “surprised.”"),
-    P("Whoever finishes the essay first may choose the next book.",
-      "Whomever finishes the essay first may choose the next book.",
-      "whowhom", "The pronoun is the subject of “finishes” (HE finishes), so it must be “whoever.”"),
-    P("Had she known about the storm, she would have stayed home.",
-      "Had she known about the storm and the icy roads.",
-      "frag-dep", "“Had she known” means “If she had known.” The correct one finishes the thought; the other is only the “if” half."),
-    P("The committee insisted that she revise the report by Monday.",
-      "The committee insisted that she revises the report by Monday.",
-      "subj", "After “insisted that,” formal grammar uses the base verb: “that she revise,” not “revises.”")
-  ]}
 ];
 </script>
 <script>
@@ -1493,7 +1284,17 @@ const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">"
 const REDUCED = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 function rgb(h){ h = h.replace("#",""); if(h.length === 3) h = h.split("").map(x => x + x).join(""); return [0,2,4].map(i => parseInt(h.slice(i,i+2),16)); }
-function mix(a, b, t){ const A = rgb(a), B = rgb(b); return "#" + A.map((v,i) => Math.round(v + (B[i]-v)*t).toString(16).padStart(2,"0")).join(""); }
+const MIXED = new Map();
+function mix(a, b, t){
+  const k = a + b + Math.round(t * 64); let v = MIXED.get(k);
+  if(v === undefined){
+    const A = rgb(a), B = rgb(b), q = Math.round(t * 64) / 64;
+    v = "#" + A.map((x,i) => Math.round(x + (B[i]-x)*q).toString(16).padStart(2,"0")).join("");
+    if(MIXED.size > 4000) MIXED.clear();
+    MIXED.set(k, v);
+  }
+  return v;
+}
 function rgba(h, a){ const c = rgb(h); return `rgba(${c[0]},${c[1]},${c[2]},${a})`; }
 
 const RANK_ICONS = ["🪶","📜","✒️","📘","🔮","👑"];
@@ -1594,16 +1395,21 @@ function renderHeroes(){ const h = heroSVG(); ["#hero","#shopHero"].forEach(id =
 /* =====================================================================
    SOUND (tiny synth, no files)
    ===================================================================== */
-let ac = null;
+let ac = null, master = null;
+// Safari and iPads start sound "suspended" and pause it when the tab is hidden, so wake it on every tap or key
+function unlockAudio(){ try{ ac = ac || new (window.AudioContext||window.webkitAudioContext)(); if(ac.state !== "running") ac.resume(); }catch(e){} }
+["pointerdown","touchend","keydown"].forEach(t => document.addEventListener(t, unlockAudio, {capture:true, passive:true}));
 function tone(freq, dur, type="sine", vol=.15, delay=0, slide=0){
   if(!S.sound) return;
   try{
     ac = ac || new (window.AudioContext||window.webkitAudioContext)();
+    if(ac.state !== "running") ac.resume();
     const t = ac.currentTime + delay, o = ac.createOscillator(), g = ac.createGain();
     o.type = type; o.frequency.setValueAtTime(freq, t);
     if(slide) o.frequency.exponentialRampToValueAtTime(freq * slide, t + dur);
     g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(.0001, t + dur);
-    o.connect(g).connect(ac.destination); o.start(t); o.stop(t + dur + .02);
+    if(!master){ master = ac.createGain(); master.connect(ac.destination); }
+    o.connect(g).connect(master); o.start(t); o.stop(t + dur + .02);
   }catch(e){}
 }
 const sfx = {
@@ -1623,7 +1429,29 @@ const sfx = {
 };
 
 /* ---------- helpers ---------- */
+// restart a one-shot CSS animation, then take the class off so it can't replay when the screen is shown again
+function replay(el, cls){
+  if(el._replayEnd) el._replayEnd();
+  el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls);
+  let t = 0;
+  const end = e => {
+    if(e && e.target !== el) return;
+    clearTimeout(t); el.classList.remove(cls); el._replayEnd = null;
+    el.removeEventListener("animationend", end); el.removeEventListener("animationcancel", end);
+  };
+  el._replayEnd = end;
+  el.addEventListener("animationend", end); el.addEventListener("animationcancel", end);
+  t = setTimeout(end, 1500);   // reduced motion turns some of these off, so animationend may never come
+}
+// briefly ignore clicks and key presses, so a double-tap or a held key can't press something that just appeared
+let inputBlockedUntil = 0;
+function ignoreInputFor(ms){ inputBlockedUntil = Math.max(inputBlockedUntil, performance.now() + ms); }
+["click","keydown"].forEach(t => document.addEventListener(t, e => {
+  if(performance.now() < inputBlockedUntil && !(e.target && e.target.tagName === "INPUT")){ e.preventDefault(); e.stopImmediatePropagation(); }
+}, true));
 function show(id){
+  $("#app").inert = false; $("#worldOverlay").inert = false;
+  if(id === "screen-over" || id === "screen-practice" || id === "screen-win") ignoreInputFor(900);
   document.querySelectorAll(".screen").forEach(s => s.classList.toggle("active", s.id === id)); window.scrollTo(0,0);
   document.body.classList.toggle("on-title", id === "screen-title");
   if(id === "screen-title") startTitleBg();
@@ -1722,23 +1550,38 @@ function pfxBurst(x, y, kind){
       pfxAdd({k:"smoke", x:x+(R()-.5)*30, y:y+(R()-.5)*20, vx:Math.cos(a)*sp, vy:-20-R()*40, max:1.2+R(), r:8+R()*12, c:"60,40,45"}); }
   }
 }
+const GLOW = new Map();
+function glowSprite(col){
+  let s = GLOW.get(col);
+  if(!s){
+    s = document.createElement("canvas"); s.width = s.height = 64;
+    const g2 = s.getContext("2d"), g = g2.createRadialGradient(32, 32, 0, 32, 32, 32);
+    g.addColorStop(0, `rgba(${col},1)`); g.addColorStop(.25, `rgba(${col},.5)`); g.addColorStop(1, `rgba(${col},0)`);
+    g2.fillStyle = g; g2.fillRect(0, 0, 64, 64);
+    if(GLOW.size > 200) GLOW.clear();
+    GLOW.set(col, s);
+  }
+  return s;
+}
 function glowDot(c, x, y, r, col, a){
-  const g = c.createRadialGradient(x, y, 0, x, y, r*4);
-  g.addColorStop(0, `rgba(${col},${a})`); g.addColorStop(.25, `rgba(${col},${a*.5})`); g.addColorStop(1, `rgba(${col},0)`);
-  c.fillStyle = g; c.fillRect(x - r*4, y - r*4, r*8, r*8);
+  if(!(a > 0) || !(r > 0)) return;
+  const ga = c.globalAlpha; c.globalAlpha = ga * Math.min(1, a);
+  c.drawImage(glowSprite(col), x - r*4, y - r*4, r*8, r*8);
+  c.globalAlpha = ga;
 }
 function pfxLoop(now){
   requestAnimationFrame(pfxLoop);
   const dt = Math.min(.05, (now - (PFX.last || now)) / 1000); PFX.last = now;
   if(!$("#screen-game").classList.contains("active") || document.hidden) return;
+  if($("#cine").classList.contains("show") || document.querySelector(".overlay.show")){ PFX.last = 0; return; }
   pfxAmbient(dt);
   const c = PFX.ctx; c.setTransform(PFX.dpr,0,0,PFX.dpr,0,0); c.clearRect(0,0,PFX.w,PFX.h);
   PFX.parts = PFX.parts.filter(p => (p.life += dt) < p.max && p.x > -80 && p.x < PFX.w + 80);
   for(const p of PFX.parts){
     const k = p.life / p.max, fade = Math.sin(k * Math.PI);
     if(p.g) p.vy += p.g * dt;
-    if(p.k === "fly"){ p.vx += (Math.random()-.5)*60*dt; p.vy += (Math.random()-.5)*40*dt; p.vx *= .98; p.vy *= .98; }
-    if(p.k === "ember"){ p.x += Math.sin(now/300 + p.ph) * .4; }
+    if(p.k === "fly"){ p.vx += (Math.random()-.5)*60*dt; p.vy += (Math.random()-.5)*40*dt; const d = Math.pow(.98, dt*60); p.vx *= d; p.vy *= d; }
+    if(p.k === "ember"){ p.x += Math.sin(now/300 + p.ph) * .4 * dt * 60; }
     p.x += p.vx * dt; p.y += (p.k === "bat" ? 0 : p.vy * dt);
     c.globalCompositeOperation = "lighter";
     if(p.k === "fly") glowDot(c, p.x, p.y, p.r, p.c, fade * (.55 + .45*Math.sin(now/180 + p.ph)));
@@ -1786,7 +1629,7 @@ function hud(){
   if(S.practice){
     $("#hudRank").textContent = "🎯 Practice";
     $("#hudGold").textContent = `✓ ${S.pStats.right} / ${S.pStats.total}`;
-    $("#progFill").style.width = ((S.level - S.pStart) / (S.pEnd - S.pStart + 1) * 100) + "%";
+    $("#progFill").style.width = (S.pStats.total / (S.pEnd - S.pStart + 1) * 100) + "%";
   }
   itemBar();
 }
@@ -1823,15 +1666,113 @@ function resetStage(){
 /* =====================================================================
    GAME FLOW
    ===================================================================== */
+/* =====================================================================
+   FULL-GAME LOCK — floors 11–50 are encrypted in the public copy
+   ===================================================================== */
+const FREE_FLOORS = 10, LOCK_STORE = "sentenceTower.key";
+const isLocked = () => LEVELS.length < 50;
+const normPass = p => String(p || "").toLowerCase().replace(/[^a-z0-9]/g, "");   // capitals, spaces and dashes are ignored
+async function unlockWith(pass){
+  if(!isLocked()) return true;
+  if(typeof LOCKED !== "string" || !window.crypto || !crypto.subtle) return false;
+  try{
+    // the same format as `openssl enc -aes-256-cbc -pbkdf2`: "Salted__" + 8-byte salt + data
+    const raw = Uint8Array.from(atob(LOCKED), ch => ch.charCodeAt(0)), salt = raw.slice(8, 16), data = raw.slice(16);
+    const base = await crypto.subtle.importKey("raw", new TextEncoder().encode(normPass(pass)), "PBKDF2", false, ["deriveBits"]);
+    const bits = new Uint8Array(await crypto.subtle.deriveBits({name:"PBKDF2", hash:"SHA-256", salt, iterations:LOCK_ITER}, base, 384));
+    const key = await crypto.subtle.importKey("raw", bits.slice(0, 32), "AES-CBC", false, ["decrypt"]);
+    const src = new TextDecoder().decode(await crypto.subtle.decrypt({name:"AES-CBC", iv:bits.slice(32)}, key, data));
+    if(!src.startsWith("/*SENTENCE-TOWER*/")) return false;
+    // build the pairs the same way the sentence bank's P() does (the game code has its own, different P)
+    const more = new Function("P", "return [" + src + "];")((c, w, t, why) => ({ c, w, t, why }));
+    if(more.length !== 50 - FREE_FLOORS || !more.every(lv => lv.pairs.length && lv.pairs.every(pr => pr.c && pr.w && pr.t))) return false;
+    if(isLocked()) LEVELS.push(...more);
+    return LEVELS.length === 50;
+  }catch(e){ return false; }
+}
+// a device that unlocked before unlocks again quietly on load
+S.unlocking = (async () => {
+  let k = null; try{ k = localStorage.getItem(LOCK_STORE); }catch(e){}
+  if(k && isLocked() && canDecrypt() && !(await unlockWith(k))){ try{ localStorage.removeItem(LOCK_STORE); }catch(e){} }
+  refreshLockUI();
+})();
+function canDecrypt(){ return !!(window.isSecureContext !== false && window.crypto && crypto.subtle); }
+function refreshLockUI(){
+  const locked = isLocked();
+  $("#unlockLink").hidden = !locked;
+  document.querySelectorAll(".ptier").forEach(b => {
+    const paid = b.dataset.t !== "0";
+    b.classList.toggle("locked", locked && paid);
+    if(paid && !b.dataset.label) b.dataset.label = b.innerHTML;
+    if(paid) b.innerHTML = (locked ? "🔒 " : "") + b.dataset.label;
+  });
+}
+function showLock(from){
+  S.lockFrom = from;
+  const climb = from === "climb";
+  $("#lockKicker").textContent = climb ? "🏆 TIER 1 CLEARED · END OF THE FREE DEMO" : "FREE DEMO · FLOORS 1–10";
+  $("#lockTitle").textContent = climb ? "The rest of the tower is locked" : "Unlock the full tower";
+  $("#lockText").innerHTML = (climb ? `Great climbing${S.name ? ", " + esc(S.name) : ""}! ` : "")
+    + `Floors 11–50 are part of the full game: 4 more tiers, 4 more bosses, and 160 more sentence challenges. Enter the password to keep climbing.`;
+  $("#lockErr").textContent = ""; $("#lockErr").className = "lock-err";
+  $("#lockInput").value = "";
+  $("#lockBack").textContent = climb ? "📜 See my Climb Report" : "🏠 Back to title";
+  $("#lockGo").disabled = $("#lockBack").disabled = false;
+  $("#lockOverlay").classList.add("show");
+  $("#app").inert = true;   // keep Tab and clicks inside the lock dialog
+  if(climb) sfx.world();
+  setTimeout(() => $("#lockInput").focus(), 60);
+}
+function hideLock(){ $("#lockOverlay").classList.remove("show"); $("#app").inert = false; }
+$("#lockForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  if($("#lockGo").disabled) return;
+  const pass = $("#lockInput").value, err = $("#lockErr");
+  if(!normPass(pass)){ err.textContent = "Type the password first."; $("#lockInput").focus(); return; }
+  if(!canDecrypt()){ err.className = "lock-err"; err.textContent = "This browser can't unlock the game here. Open the game from its https:// link, or update the browser."; return; }
+  $("#lockGo").disabled = $("#lockBack").disabled = true; err.className = "lock-err"; err.textContent = "Checking…";
+  await S.unlocking;                      // a saved password may already be unlocking this device
+  const wasLocked = isLocked(), ok = await unlockWith(pass);
+  if(!ok){ $("#lockGo").disabled = $("#lockBack").disabled = false; err.textContent = "That password didn't work. Check the spelling and try again."; $("#lockInput").select(); sfx.bad(); return; }
+  if(wasLocked){ try{ localStorage.setItem(LOCK_STORE, normPass(pass)); }catch(e){} }
+  refreshLockUI();
+  err.className = "lock-err ok"; err.textContent = "🔓 Unlocked! The whole tower is open.";
+  sfx.world();
+  await wait(900);
+  hideLock();
+  if(S.lockFrom === "climb"){ await climbCine(S.level); nextLevel(); }
+  else if(S.lockFrom === "practice") startRun(true);
+});
+$("#lockBack").addEventListener("click", () => {
+  if($("#lockBack").disabled) return;
+  hideLock();
+  if(S.lockFrom === "climb") gameOver(null, true);       // the free demo is done: show a report to hand in
+  else if(S.lockFrom === "practice"){ document.body.dataset.world = 1; show("screen-title"); }
+});
+$("#unlockLink").addEventListener("click", () => showLock("title"));
+
+// outfits and gear a climber has bought stay with them for "Climb Again" (until the page is closed or "New Climber")
+const WARDROBES = Object.create(null);
+function wardrobe(){
+  const who = (S.name || "").trim().toLowerCase();
+  if(!WARDROBES[who]) WARDROBES[who] = { outfit:"explorer", ownedOutfits:new Set(["explorer"]), ownedGear:new Set(), gearOn:new Set() };
+  return WARDROBES[who];   // the same Sets, so shop purchases are remembered automatically
+}
+function saveWardrobe(){ const w = wardrobe(); w.outfit = S.outfit; }
 function startRun(practice){
   practice = practice === true;
+  if(!(history.state && history.state.climb)) history.pushState({climb:1}, "");
   S.t0 = Date.now();
   $("#feedback").hidden = true;
+  achQ.length = 0; S.tryNote = "";
+  $("#bossLayer").innerHTML = ""; $("#bossHud").innerHTML = ""; $("#stage").classList.remove("bossfloor");
+  ["shake","swap"].forEach(c => $("#stage").classList.remove(c)); $("#hudGold").classList.remove("bump");
   Object.assign(S, { practice, level:1, gold:0, spent:0, world:-1, busy:true, trap:null, sealed:-1,
-    outfit:"explorer", ownedOutfits:new Set(["explorer"]), ownedGear:new Set(), gearOn:new Set(),
+    ...wardrobe(),
     inv:{crystal:0,key:0}, bought:{crystal:0,key:0}, used:[], floorUsed:{crystal:false,key:false},
     combo:0, tierClean:true, ach:new Set(), cnt:{comma:0, frag:0, agree:0, mod:0} });
   renderHeroes();
+  if(practice && S.pTier !== 0 && isLocked()){ showLock("practice"); return; }
   if(practice){
     const t = S.pTier;
     S.pStart = t === "all" ? 1 : t*10 + 1; S.pEnd = t === "all" ? 50 : t*10 + 10;
@@ -1845,7 +1786,10 @@ function startRun(practice){
 }
 function nextLevel(){
   const w = tierOf(S.level);
-  if(w !== S.world){ S.world = w; tierIntro(w); return; }
+  if(w !== S.world){
+    if(S.level > FREE_FLOORS && isLocked()){ showLock("climb"); return; }
+    S.world = w; tierIntro(w); return;
+  }
   setupLevel();
 }
 function tierIntro(w){
@@ -1857,11 +1801,11 @@ function tierIntro(w){
   $("#wSkill").textContent = "Skill: " + WORLDS[w].skill;
   $("#wRank").textContent = w === 0 ? "Your rank: " + rankLabel(0) : "⭐ Rank up! You are now: " + rankLabel(w * 10);
   resetStage(); decorateRoom(); hud();
-  $("#worldOverlay").classList.add("show");
+  $("#worldOverlay").classList.add("show"); $("#app").inert = true;
   if(w > 0) sfx.world();
   setTimeout(() => $("#wGo").focus(), 50);
 }
-$("#wGo").addEventListener("click", () => { $("#worldOverlay").classList.remove("show"); setupLevel(); });
+$("#wGo").addEventListener("click", () => { $("#worldOverlay").classList.remove("show"); $("#app").inert = false; setupLevel(); showTryNote(); });
 $("#wShop").addEventListener("click", () => openShop());
 
 function setupLevel(){
@@ -1876,6 +1820,7 @@ function setupLevel(){
   resetStage(); decorateRoom(); setupBoss();
   S.floorStart = performance.now();
   S.busy = false; hud();
+  $("#srStatus").textContent = `Floor ${S.level} of 50${isBossFloor() ? ", boss floor" : ""}. Door A: ${texts[0]} Door B: ${texts[1]}`;
 }
 
 function heroTo(side){
@@ -1902,13 +1847,14 @@ function flyCoins(fromEl, n){
       {transform:`translate(${mx}px,${my}px) scale(1.2)`, opacity:1, offset:.45},
       {transform:`translate(${x1}px,${y1}px) scale(.6)`, opacity:.9}
     ], {duration:750 + i*70, easing:"cubic-bezier(.4,0,.3,1)", delay:i*40});
-    an.onfinish = () => { el.remove(); const g = $("#hudGold"); g.classList.remove("bump"); void g.offsetWidth; g.classList.add("bump"); if(i % 2 === 0) tone(1319 + i*40,.06,"square",.03); };
+    an.onfinish = () => { el.remove(); replay($("#hudGold"), "bump"); if(i % 2 === 0) tone(1319 + i*40,.06,"square",.03); };
   }
 }
 
 async function choose(side){
   if(S.busy || side === S.sealed || $("#shopOverlay").classList.contains("show")) return;
   S.busy = true; itemBar(); lookAt(null);
+  if(document.activeElement && document.activeElement.blur) document.activeElement.blur();
   const ok = side === S.correct;
   const card = side === 0 ? $("#choiceA") : $("#choiceB");
   const door = side === 0 ? $("#doorA") : $("#doorB");
@@ -1926,7 +1872,7 @@ async function choose(side){
     if(boss) await bossDefeat();
     const sr = $("#stage").getBoundingClientRect(), dr = door.getBoundingClientRect();
     pfxBurst(dr.left - sr.left + dr.width/2, dr.top - sr.top + dr.height*.45, "gold");
-    S.combo++;
+    S.combo = (S.floorUsed.crystal || S.floorUsed.key) ? 0 : S.combo + 1;
     const tier = tierOf(S.level), mult = comboMult(), earned = Math.round(10 * (tier + 1) * mult);
     if(S.practice) return;
     S.gold += earned; floatNum(door, `+${earned} 🪙`, mult > 1 ? `🔥 ×${mult} combo` : ""); flyCoins(door, Math.min(8, 3 + tier));
@@ -1945,6 +1891,7 @@ async function choose(side){
     hideToast();
     S.level++;
     if(S.level > 50){ await climbCine(51); win(); return; }
+    if(S.level > FREE_FLOORS && isLocked()){ showLock("climb"); return; }
     await climbCine(S.level);
     nextLevel();
   } else {
@@ -1965,10 +1912,10 @@ function hideToast(){ $("#toast").classList.remove("show"); }
    ===================================================================== */
 const C = { cv:null, ctx:null, world:null };
 function cineSize(){
-  const dpr = Math.min(2, window.devicePixelRatio || 1), W = window.innerWidth, H = window.innerHeight;
+  const dpr = Math.min(1.5, window.devicePixelRatio || 1), W = window.innerWidth, H = window.innerHeight;
   C.cv.width = W * dpr; C.cv.height = H * dpr;
   Object.assign(C, { W, H, dpr });
-  C.FH = Math.max(110, H * .30);                       // height of one floor
+  C.FH = C.lockFH || Math.max(110, H * .30);           // height of one floor (kept steady while a climb plays)
   C.R = Math.min(W * .17, C.FH * .78, 175);            // tower radius
   C.SW = C.R * .46;                                    // stair width
   C.TILT = .22;                                        // how much we look down on the tower
@@ -2258,7 +2205,7 @@ function camMix(a, b, t){ return { x:a.x + (b.x - a.x)*t, alt:a.alt + (b.alt - a
 function climbCine(floor){
   return new Promise(resolve => {
     C.cv = $("#cineCanvas"); C.ctx = C.cv.getContext("2d");
-    cineSize(); buildFrames();
+    C.lockFH = 0; cineSize(); buildFrames(); C.lockFH = C.FH;
     const FH = C.FH, summit = floor === 51, tierStart = !summit && floor % 10 === 1;
     const a0 = summit ? C.TOP - FH*(1 - .35/Math.PI) : (floor - 2) * FH;
     const thOf = a => Math.PI * (a - a0) / FH - Math.PI/2;
@@ -2328,7 +2275,8 @@ function climbCine(floor){
         if(fNow > 30 && fNow < 41 && Math.random() < dt*14) parts.push({x:Math.random()*C.W, y:C.H + 5, vx:(Math.random()-.5)*20, vy:-60 - Math.random()*80, life:0, max:3, r:1.5 + Math.random()*1.5, c:"255,140,50"});
         if(fNow > 43 && Math.random() < dt*10) parts.push({x:Math.random()*C.W, y:Math.random()*C.H, vx:0, vy:-5, life:0, max:1.2, r:1.5 + Math.random()*2, c:"255,220,120"});
       }
-      for(const q of parts.concat(fw)){ q.life += dt; q.x += q.vx*dt; q.y += q.vy*dt; if(fw.includes(q)) q.vy += 90*dt; q.a = Math.sin(clamp(q.life/q.max)*Math.PI) * (fw.includes(q) ? 1.2 - q.life/q.max : .9); }
+      for(const q of parts){ q.life += dt; q.x += q.vx*dt; q.y += q.vy*dt; q.a = Math.sin(clamp(q.life/q.max)*Math.PI) * .9; }
+      for(const q of fw){ q.life += dt; q.x += q.vx*dt; q.y += q.vy*dt; q.vy += 90*dt; q.a = Math.sin(clamp(q.life/q.max)*Math.PI) * (1.2 - q.life/q.max); }
       for(const arr of [parts, fw]) for(let i = arr.length - 1; i >= 0; i--) if(arr[i].life > arr[i].max) arr.splice(i, 1);
 
       // UI
@@ -2347,13 +2295,22 @@ function climbCine(floor){
       document.removeEventListener("keydown", onKey, true);
       el.classList.remove("bars", "show");
       title.className = "c-title";
+      C.lockFH = 0;
       resetStage();
+      ignoreInputFor(450);
       resolve();
     }
     requestAnimationFrame(frame);
   });
 }
-window.addEventListener("resize", () => { if(C.cv && ($("#cine").classList.contains("show") || document.body.classList.contains("on-title"))) cineSize(); });
+let rzT, rzW = window.innerWidth, rzH = window.innerHeight;
+window.addEventListener("resize", () => { clearTimeout(rzT); rzT = setTimeout(() => {
+  // a phone's address bar sliding in and out changes the height a little; don't rebuild the scene for that
+  const w = window.innerWidth, h = window.innerHeight;
+  if(w === rzW && Math.abs(h - rzH) < rzH * .15) return;
+  rzW = w; rzH = h;
+  if(C.cv && ($("#cine").classList.contains("show") || document.body.classList.contains("on-title"))) cineSize();
+}, 150); });
 
 /* =====================================================================
    ITEMS + SHOP
@@ -2364,7 +2321,8 @@ function useCrystal(){
   S.inv.crystal--; S.floorUsed.crystal = true; S.used.push({item:"crystal", floor:S.level});
   const et = ERROR_TYPES[S.pair.t], hb = $("#hintBox");
   hb.innerHTML = `🔮 <b>The crystal glows…</b> The trapped door’s mistake is: <b>${esc(et.name)}</b>.<small>${esc(et.rule)}</small>`;
-  hb.hidden = false; sfx.magic(); itemBar();
+  hb.hidden = false; sfx.magic(); hud();
+  $("#srStatus").textContent = "Crystal: the trapped door's mistake is " + et.name + ". " + et.rule;
   const sr = $("#stage"); pfxBurst(sr.clientWidth/2, sr.clientHeight*.4, "gold");
 }
 function useKey(){
@@ -2375,8 +2333,9 @@ function useKey(){
   const card = bad === 0 ? $("#choiceA") : $("#choiceB");
   const door = bad === 0 ? $("#doorA") : $("#doorB");
   card.classList.add("sealed"); card.disabled = true; card.querySelector(".side-hint").textContent = "🔒 Sealed";
+  $("#srStatus").textContent = `Door ${bad === 0 ? "A" : "B"} is sealed. Only door ${bad === 0 ? "B" : "A"} is left.`;
   door.classList.add("sealed"); door.insertAdjacentHTML("beforeend", `<div class="chains">⛓️🔒</div>`);
-  sfx.magic(); itemBar();
+  sfx.magic(); hud();
 }
 $("#useCrystal").addEventListener("click", useCrystal);
 $("#useKey").addEventListener("click", useKey);
@@ -2413,8 +2372,8 @@ const TABS = [["item","✨ Magic"],["outfit","👕 Outfits"],["gear","🎒 Gear"
 const LINES = {
   open:["Welcome, climber! Gold for glory, I always say.","Ahh, a customer! Have a look around.","Finest wares in the whole tower!","Step right up! Try anything on."],
   item:{ crystal:"Gaze into it and the trapped door gives up its secret…", key:"The rarest key in the tower. It seals a trap shut for good!" },
-  outfit:"Try it on! The mirror doesn't lie.",
-  gear:"A fine piece of gear for a fine climber.",
+  outfit:"Try it on! Press Buy to keep it.",
+  gear:"A fine piece of gear! Press Buy to keep it.",
   buy:["Pleasure doing business!","Sold! Wear it well.","Cha-ching! Excellent choice.","A wise purchase, climber."],
   buyItem:"Use it wisely. My stock is limited!",
   poor:"Hmm… you need {n} more gold. Keep climbing!",
@@ -2451,12 +2410,27 @@ function openShop(){
   if(!S.shopSel || S.shopSel.kind !== S.shopTab) S.shopSel = {kind:S.shopTab, id:catalog(S.shopTab)[0].id};
   renderShop();
   say(pick(LINES.open));
-  $("#shopOverlay").classList.add("show");
+  $("#shopOverlay").classList.add("show"); $("#app").inert = true; $("#worldOverlay").inert = true;
   tone(1568,.35,"sine",.07); tone(2093,.5,"sine",.05,.09);
   setTimeout(() => $("#shopClose").focus(), 50);
 }
-function closeShop(){ $("#shopOverlay").classList.remove("show"); renderHeroes(); hud(); }
+function closeShop(){
+  $("#shopOverlay").classList.remove("show"); saveWardrobe(); renderHeroes(); hud();
+  $("#worldOverlay").inert = false; $("#app").inert = $("#worldOverlay").classList.contains("show");
+  S.tryNote = "";
+  const back = $("#worldOverlay").classList.contains("show") ? $("#wGo") : $("#shopBtn");
+  if(back && !back.hidden) back.focus({preventScroll:true});
+  // the shop mirror shows anything you tap, so say so when they leave wearing only what they've paid for
+  const sel = S.shopSel, owned = sel && (sel.kind === "outfit" ? S.ownedOutfits.has(sel.id) : sel.kind === "gear" ? S.ownedGear.has(sel.id) : true);
+  if(sel && !owned){
+    const it = (sel.kind === "outfit" ? OUTFITS : GEAR)[sel.id];
+    S.tryNote = `<b>👀 You only tried on the ${esc(it.name)}</b><br><small>Press <b>Buy</b> in the shop to wear it on your climb.</small>`;
+    if(!$("#worldOverlay").classList.contains("show")) showTryNote();   // otherwise it shows when the tier screen closes
+  }
+}
+function showTryNote(){ if(!S.tryNote) return; toast(S.tryNote); toastT = setTimeout(hideToast, 3200); S.tryNote = ""; }
 function renderShop(){
+  const f = document.activeElement, refocus = f && (f.dataset.id ? `.tile[data-id="${f.dataset.id}"]` : f.dataset.tab ? `.tab[data-tab="${f.dataset.tab}"]` : f.id === "shopAct" ? "#shopAct" : null);
   $("#shopGold").textContent = S.gold;
   $("#shopTabs").innerHTML = TABS.map(([k, label]) => {
     const n = catalog(k).filter(e => k === "item" ? S.inv[e.id] : k === "outfit" ? S.ownedOutfits.has(e.id) && e.id !== "explorer" : S.ownedGear.has(e.id)).length;
@@ -2470,6 +2444,7 @@ function renderShop(){
       ${st.extra ? `<span class="bag">${st.extra}</span>` : ""}</button>`;
   }).join("");
   renderDetail(); renderPreview();
+  if(refocus){ const n = $(refocus); (n && !n.disabled ? n : $(`.tile[data-id="${S.shopSel.id}"]`) || $("#shopClose")).focus(); }
 }
 function renderDetail(){
   const {kind, id} = S.shopSel, it = (kind === "item" ? ITEMS : kind === "outfit" ? OUTFITS : GEAR)[id];
@@ -2489,7 +2464,7 @@ function renderPreview(){
   if(kind === "gear") gear.add(id);
   $("#shopHero").innerHTML = heroSVG({outfit, gear});
   const trying = (kind === "outfit" && S.outfit !== id) || (kind === "gear" && !S.gearOn.has(id));
-  $("#previewTag").textContent = trying ? "👀 Trying on: " + (kind === "outfit" ? OUTFITS : GEAR)[id].name : kind === "item" ? (S.inv.crystal || S.inv.key ? `Bag: 🔮×${S.inv.crystal}  🗝️×${S.inv.key}` : "") : "Looking good!";
+  $("#previewTag").textContent = trying ? (((kind === "outfit" ? S.ownedOutfits : S.ownedGear).has(id) ? "👀 Trying on: " : "👀 Trying on (not bought yet): ") + (kind === "outfit" ? OUTFITS : GEAR)[id].name) : kind === "item" ? (S.inv.crystal || S.inv.key ? `Bag: 🔮×${S.inv.crystal}  🗝️×${S.inv.key}` : "") : "Looking good!";
 }
 function celebrate(kind, id){
   const tile = $(`.tile[data-id="${id}"]`), purse = $("#purse");
@@ -2541,6 +2516,8 @@ $("#shopGrid").addEventListener("click", e => {
   const again = S.shopSel && S.shopSel.id === id;
   S.shopSel = {kind, id};
   tone(740,.05,"triangle",.05);
+  if(kind === "outfit" && S.ownedOutfits.has(id) && S.outfit !== id){ S.outfit = id; say(LINES.wear); renderShop(); return; }
+  if(kind === "gear" && S.ownedGear.has(id) && !S.gearOn.has(id)){ S.gearOn.add(id); say(LINES.equip); renderShop(); return; }
   if(!again){
     const st = stateOf(kind, id, it);
     say(st.cls === "maxed" ? LINES.sold : st.need ? LINES.poor.replace("{n}", st.need) : kind === "item" ? LINES.item[id] : LINES[kind]);
@@ -2575,7 +2552,7 @@ function trap(hx){
   const heroClass = {trapdoor:"fall", cage:"", spider:"stuck", boulder:"squash", flood:"float", fire:"singe", dragon:"singe"}[type];
   if(heroClass) setTimeout(() => hero.classList.add(heroClass), 30);
   const shakeAt = {trapdoor:300, cage:480, spider:900, boulder:550, flood:200, fire:250, dragon:1150}[type];
-  setTimeout(() => { stage.classList.remove("shake"); void stage.offsetWidth; stage.classList.add("shake"); pfxBurst(hx, stage.clientHeight*.7, "smoke"); }, shakeAt);
+  setTimeout(() => { replay(stage, "shake"); pfxBurst(hx, stage.clientHeight*.7, "smoke"); }, shakeAt);
   if(type === "boulder") tone(70,1.2,"sawtooth",.1);
   if(type === "dragon") tone(90,1.4,"sawtooth",.12,.4,.5);
   if(type === "flood") tone(300,1.2,"sine",.06,0,.5);
@@ -2592,6 +2569,7 @@ function stamp(){
   const d = new Date();
   return d.toLocaleDateString(undefined,{weekday:"short",year:"numeric",month:"short",day:"numeric"}) + " · " + d.toLocaleTimeString(undefined,{hour:"numeric",minute:"2-digit"});
 }
+function focusHeading(sel){ const h = $(sel + " h1"); if(h){ h.tabIndex = -1; h.style.outline = "none"; h.focus({preventScroll:true}); } }
 function skillsList(cleared){
   return `<ul class="skills">` + WORLDS.map((w,i) => {
     const done = cleared >= (i+1)*10, partial = !done && cleared > i*10;
@@ -2611,16 +2589,19 @@ function helpLine(){
 
 const TRAP_ICON = {trapdoor:"🕳️", cage:"⛓️", spider:"🕷️", boulder:"🪨", flood:"🌊", fire:"🔥", dragon:"🐉"};
 // highlight the words that differ between two sentences (LCS on word/punctuation tokens)
+// fragment and modifier pairs differ by more than the mistake (the wrong one often adds filler words), so don't highlight those
+const diffFor = p => (p.t.startsWith("frag") || p.t === "misplaced" || p.t === "dangling") ? [esc(p.w), esc(p.c), false] : diffMarks(p.w, p.c);
 function diffMarks(a, b){
+  const norm = t => t.toLowerCase().replace(/’/g, "'");
   const tok = s => s.match(/\s+|[\p{L}\p{N}'’-]+|[^\s]/gu) || [];
   const A = tok(a), B = tok(b), isW = t => !/^\s+$/.test(t);
   const ia = A.map((t,i) => i).filter(i => isW(A[i])), ib = B.map((t,i) => i).filter(i => isW(B[i]));
   const n = ia.length, m = ib.length, dp = Array.from({length:n+1}, () => new Array(m+1).fill(0));
   for(let i = n-1; i >= 0; i--) for(let j = m-1; j >= 0; j--)
-    dp[i][j] = A[ia[i]].toLowerCase() === B[ib[j]].toLowerCase() ? dp[i+1][j+1] + 1 : Math.max(dp[i+1][j], dp[i][j+1]);
+    dp[i][j] = norm(A[ia[i]]) === norm(B[ib[j]]) ? dp[i+1][j+1] + 1 : Math.max(dp[i+1][j], dp[i][j+1]);
   const keepA = new Set(), keepB = new Set();
   for(let i = 0, j = 0; i < n && j < m;){
-    if(A[ia[i]].toLowerCase() === B[ib[j]].toLowerCase()){ keepA.add(ia[i]); keepB.add(ib[j]); i++; j++; }
+    if(norm(A[ia[i]]) === norm(B[ib[j]])){ keepA.add(ia[i]); keepB.add(ib[j]); i++; j++; }
     else if(dp[i+1][j] >= dp[i][j+1]) i++; else j++;
   }
   const changed = (n - keepA.size) + (m - keepB.size);
@@ -2670,21 +2651,22 @@ function helpSummary(){
   return [c ? `🔮×${c}` : "", k ? `🗝️×${k}` : ""].filter(Boolean).join("  ");
 }
 
-function gameOver(side){
-  const cleared = S.level - 1, p = S.pair, et = ERROR_TYPES[p.t], lv = LEVELS[S.level - 1], w = tierOf(S.level);
+function gameOver(side, demo){
+  // demo = true: the climber cleared every free floor and stopped at the lock, so there's no missed sentence to show
+  const cleared = S.level - 1, p = S.pair, et = ERROR_TYPES[p.t], lv = LEVELS[S.level - 1] || LEVELS[LEVELS.length - 1], w = tierOf(demo ? cleared : S.level);
   const prevBest = S.best || 0, newBest = S.played && cleared > prevBest;
   S.best = Math.max(prevBest, cleared); S.played = true;
-  const [wHtml, cHtml, diffed] = diffMarks(p.w, p.c);
+  const [wHtml, cHtml, diffed] = diffFor(p);
   const ri = rankIndex(cleared);
   $("#report").innerHTML = `
     <div class="r-head">
       <div class="wax" aria-hidden="true">${RANK_ICONS[ri]}</div>
       <h1>Climb Report</h1>
       <p class="sub">Sentence Tower · Official record to show your teacher</p>
-      <div class="mode-tag quest">🏰 Main Quest</div>
+      <div class="mode-tag quest">🏰 Main Quest${demo ? " · Free demo complete" : ""}</div>
     </div>
     <div class="r-hero">
-      ${miniTower(cleared, S.level)}
+      ${miniTower(cleared, demo ? 0 : S.level)}
       <div class="r-climber">
         <div class="hero-mini">${heroSVG()}</div>
         <div style="min-width:0"><div class="r-name">${esc(S.name)}</div><div class="r-date">${esc(stamp())}</div>
@@ -2699,8 +2681,8 @@ function gameOver(side){
       <div class="stat"><span class="si">⏱️</span><div><small>Time taken</small><strong>${elapsed()}</strong></div></div>
       <div class="stat"><span class="si">⭐</span><div><small>Best this session</small><strong>${S.best} floors</strong></div></div>
     </div>
-    <p class="r-msg">${newBest ? `<span class="best">🎉 New personal best!</span>` : ""}${esc(cheerMsg(cleared))}</p>
-    <div class="trapline"><span class="tic">${TRAP_ICON[S.trap]}</span><span>${esc(TRAP_TEXT[S.trap][1])} on Floor ${S.level}<br><small style="font-weight:400">Skill: ${esc(lv.focus)}</small></span></div>
+    <p class="r-msg">${newBest ? `<span class="best">🎉 New personal best!</span>` : ""}${esc(demo ? "You cleared every floor of the free demo and beat the troll! Floors 11–50 are in the full game." : cheerMsg(cleared))}</p>
+    ${demo ? "" : `<div class="trapline"><span class="tic">${TRAP_ICON[S.trap]}</span><span>${esc(TRAP_TEXT[S.trap][1])} on Floor ${S.level}<br><small style="font-weight:400">Skill: ${esc(lv.focus)}</small></span></div>
 
     <h2>What went wrong</h2>
     <div class="compare">
@@ -2713,7 +2695,7 @@ function gameOver(side){
       <p class="why">${esc(p.why)}</p>
       <div class="box"><span class="bi">📘</span><div><b>The rule:</b> ${esc(et.rule)}</div></div>
       <div class="box fix"><span class="bi">🛠️</span><div><b>How to fix it:</b> ${esc(et.tip)}</div></div>
-    </div>
+    </div>`}
 
     ${achGrid()}
     <h2>Skills progress</h2>
@@ -2728,10 +2710,15 @@ function gameOver(side){
   show("screen-over");
   $("#againBtn").onclick = startRun;
   $("#printBtn").onclick = () => window.print();
-  $("#newBtn").onclick = () => { S.name=""; S.best=0; S.played=false; $("#nameInput").value=""; document.body.dataset.world=1; show("screen-title"); $("#nameInput").focus(); };
-  $("#againBtn").focus({preventScroll:true});
+  $("#newBtn").onclick = newClimber;
+  focusHeading("#report");
 }
 
+function newClimber(){
+  const who = S.name.trim().toLowerCase(); delete WARDROBES[who]; delete ACH_SEEN[who];
+  S.name = ""; S.best = 0; S.played = false; $("#nameInput").value = ""; document.body.dataset.world = 1;
+  show("screen-title"); $("#nameInput").focus();
+}
 function win(){
   S.best = 50; S.played = true;
   sfx.win();
@@ -2742,7 +2729,7 @@ function win(){
     <div class="mode-tag quest" style="margin-top:8px">🏰 Main Quest · Complete</div>
     <p class="sub">The crown at the top of Sentence Tower has been claimed!</p>
     <p style="text-align:center;font-size:1.15rem">This certifies that</p>
-    <p style="text-align:center;font-family:var(--display);font-weight:900;font-size:clamp(1.6rem,6vw,2.6rem);margin:.1em 0">${esc(S.name)}</p>
+    <p style="text-align:center;font-family:var(--display);font-weight:900;font-size:clamp(1.6rem,6vw,2.6rem);margin:.1em 0;overflow-wrap:anywhere">${esc(S.name)}</p>
     <p style="text-align:center;font-size:1.1rem">climbed all <b>50 floors</b> of Sentence Tower and earned the rank of<br><b style="font-size:1.3rem">👑 Grammar Master</b></p>
     <div class="meta" style="margin-top:16px">
       <div><small>Floors cleared</small><strong>50 / 50</strong></div>
@@ -2757,10 +2744,13 @@ function win(){
     <div class="actions">
       <button class="btn" id="winAgain">↻ Climb Again</button>
       <button class="btn ghost" id="winPrint">🖨️ Print Certificate</button>
+      <button class="btn ghost" id="winNew">👤 New Climber</button>
     </div>`;
   show("screen-win");
   $("#winAgain").onclick = startRun;
   $("#winPrint").onclick = () => window.print();
+  $("#winNew").onclick = newClimber;
+  focusHeading("#cert");
   const coins = $("#coins"); coins.innerHTML = "";
   for(let i=0;i<60;i++){
     const c = document.createElement("i");
@@ -2862,7 +2852,7 @@ const BOSSES = [
   </svg>` }
 ];
 const isBossFloor = () => S.level % 10 === 0;
-function stageShake(){ const st = $("#stage"); st.classList.remove("shake"); void st.offsetWidth; st.classList.add("shake"); }
+function stageShake(){ const st = $("#stage"); replay(st, "shake"); }
 function showBanner(html, cls, dur){
   const b = document.createElement("div"); b.className = "bnr " + (cls || ""); b.innerHTML = html;
   $("#banners").appendChild(b);
@@ -2937,14 +2927,24 @@ setInterval(() => {
   if(idleFor > 8000 && r < .35) emote("🤔", "", 1800);
   else if((tierOf(S.level) >= 3 || isBossFloor()) && r < .5) emote("💧", "sweat", 1400);
   else if(r < .72) hero.classList.toggle("face-left");
-  else { hero.classList.remove("hop"); void hero.offsetWidth; hero.classList.add("hop"); }
+  else { hero.classList.remove("hop"); void hero.offsetWidth; hero.classList.add("hop"); setTimeout(() => hero.classList.remove("hop"), 400); }
 }, 2600);
 function cheer(){ const h = $("#hero"); h.classList.remove("cheer"); void h.offsetWidth; h.classList.add("cheer"); emote("✨", "", 1100); setTimeout(() => h.classList.remove("cheer"), 1000); }
 
 /* =====================================================================
    PARALLAX DEPTH — the room shifts with the mouse or a tilted phone
    ===================================================================== */
-function setPar(px, py){ const st = $("#stage"); st.style.setProperty("--px", px.toFixed(3)); st.style.setProperty("--py", py.toFixed(3)); }
+let parNext = null, parNow = [0, 0];
+function setPar(px, py){
+  if(S.busy || document.querySelector(".overlay.show")) return;
+  const first = !parNext; parNext = [px, py];
+  if(first) requestAnimationFrame(() => {
+    const [x, y] = parNext; parNext = null;
+    if(Math.abs(x - parNow[0]) < .02 && Math.abs(y - parNow[1]) < .02) return;
+    parNow = [x, y];
+    const st = $("#stage"); st.style.setProperty("--px", x.toFixed(3)); st.style.setProperty("--py", y.toFixed(3));
+  });
+}
 if(!REDUCED){
   window.addEventListener("pointermove", e => {
     if(e.pointerType !== "mouse" || !$("#screen-game").classList.contains("active")) return;
@@ -2986,17 +2986,26 @@ const ACH = [
   {id:"style",  icon:"👗", name:"Dressed to Climb", desc:"Buy a new outfit"}
 ];
 const achQ = []; let achBusy = false;
+// badges each climber has already been shown, so "Climb Again" doesn't replay the same pop-ups every time
+const ACH_SEEN = Object.create(null);
 function unlock(id){
   if(S.practice || !S.ach || S.ach.has(id)) return;
   const a = ACH.find(x => x.id === id); if(!a) return;
-  S.ach.add(id); achQ.push(a); if(!achBusy) nextAch();
+  S.ach.add(id);
+  const who = (S.name || "").trim().toLowerCase(), seen = ACH_SEEN[who] || (ACH_SEEN[who] = new Set());
+  if(seen.has(id)) return;
+  achQ.push({ ...a, who }); if(!achBusy) nextAch();
 }
 function nextAch(){
   const a = achQ.shift(); if(!a){ achBusy = false; return; }
+  const seen = ACH_SEEN[a.who] || (ACH_SEEN[a.who] = new Set());
+  if(seen.has(a.id)) return nextAch();
+  seen.add(a.id);
   achBusy = true;
   const el = document.createElement("div"); el.className = "ach-pop"; el.setAttribute("role", "status");
   el.innerHTML = `<span class="ai">${a.icon}</span><div><small>🏆 Achievement unlocked</small><b>${esc(a.name)}</b><span>${esc(a.desc)}</span></div>`;
   document.body.appendChild(el); sfx.ach();
+  $("#srStatus").textContent = `Achievement unlocked: ${a.name}. ${a.desc}`;
   setTimeout(() => { el.classList.add("out"); setTimeout(() => { el.remove(); nextAch(); }, 400); }, 2700);
 }
 function trackCorrect(){
@@ -3039,14 +3048,14 @@ function practiceAnswer(ok, side, card, door, hx){
     st.streak = 0; st.misses.push({floor:S.level, pair:S.pair});
     card.classList.add("wrong"); other.classList.add("picked", "right"); sfx.bad(); emote("❗", "bad", 1200);
     if(isBossFloor()) bossRoar();
-    const stage = $("#stage"); stage.classList.remove("shake"); void stage.offsetWidth; stage.classList.add("shake");
+    const stage = $("#stage"); replay(stage, "shake");
     pfxBurst(hx, stage.clientHeight*.7, "smoke");
   }
   hud(); showFeedback(ok);
 }
 function showFeedback(ok){
   const p = S.pair, et = ERROR_TYPES[p.t], fb = $("#feedback"), last = S.level >= S.pEnd;
-  const [wHtml, cHtml] = diffMarks(p.w, p.c);
+  const [wHtml, cHtml] = diffFor(p);
   const body = ok
     ? `<div class="sent bad"><div class="lbl"><span class="mk">✗</span>The trapped door · ${esc(et.name)}</div>${wHtml}</div><p class="why">${esc(p.why)}</p>`
     : `<div class="compare"><div class="sent bad"><div class="lbl"><span class="mk">✗</span>You chose</div>${wHtml}</div>
@@ -3059,6 +3068,7 @@ function showFeedback(ok){
     <div class="fb-next"><button class="btn" id="fbNext">${last ? "See my results ➜" : "Next floor ➜"}</button></div>`;
   fb.hidden = false;
   $("#fbNext").onclick = practiceNext;
+  $("#srStatus").textContent = (ok ? "Correct! " : "Not quite. The correct sentence is: " + p.c + " ") + p.why;
   setTimeout(() => { fb.scrollIntoView({behavior: REDUCED ? "auto" : "smooth", block:"nearest"}); $("#fbNext").focus({preventScroll:true}); }, 380);
 }
 async function practiceNext(){
@@ -3066,7 +3076,7 @@ async function practiceNext(){
   fb.hidden = true;
   if(S.level >= S.pEnd){ practiceSummary(); return; }
   S.level++;
-  const stage = $("#stage"); stage.classList.remove("swap"); void stage.offsetWidth; stage.classList.add("swap");
+  const stage = $("#stage"); replay(stage, "swap");
   sfx.whoosh(); window.scrollTo({top:0, behavior: REDUCED ? "auto" : "smooth"});
   await wait(300);
   S.world = tierOf(S.level); setupLevel();
@@ -3081,7 +3091,7 @@ function practiceSummary(){
     return `<div class="rv"><h3>${esc(et.name)} <span class="cnt">missed ${ms.length}×</span></h3>
       <div class="box"><span class="bi">📘</span><div>${esc(et.rule)}</div></div>
       <div class="box fix"><span class="bi">🛠️</span><div>${esc(et.tip)}</div></div>
-      ${ms.slice(0, 3).map(m => { const [w, c] = diffMarks(m.pair.w, m.pair.c); return `<div class="ex"><small>Floor ${m.floor}</small><div>✗ ${w}</div><div>✓ ${c}</div></div>`; }).join("")}</div>`;
+      ${ms.slice(0, 3).map(m => { const [w, c] = diffFor(m.pair); return `<div class="ex"><small>Floor ${m.floor}</small><div>✗ ${w}</div><div>✓ ${c}</div></div>`; }).join("")}</div>`;
   }).join("");
   const msg = !st.total ? "No floors practiced yet. Give it a try!" : pct === 100 ? "Perfect round! You're ready for a real climb." : pct >= 80 ? "Great work! Review the rules below, then try a real climb." :
     pct >= 50 ? "Good practice. Study the rules below and run it again." : "Keep practicing! Read each rule below, then try this tier again.";
@@ -3109,7 +3119,7 @@ function practiceSummary(){
   $("#pAgain").onclick = () => startRun(true);
   $("#pClimb").onclick = () => startRun();
   $("#pHome").onclick = () => { document.body.dataset.world = 1; show("screen-title"); };
-  $("#pAgain").focus({preventScroll:true});
+  focusHeading("#pReport");
 }
 $("#endPractice").addEventListener("click", () => { if(S.busy && $("#feedback").hidden) return; $("#feedback").hidden = true; practiceSummary(); });
 
@@ -3117,6 +3127,7 @@ $("#endPractice").addEventListener("click", () => { if(S.busy && $("#feedback").
 S.mode = "climb"; S.pTier = 0;
 $("#pTiers").innerHTML = WORLDS.map((w, i) => `<button type="button" class="ptier" data-t="${i}" style="--ta:${TIER_ACCENT[i]}" aria-pressed="${i === 0}">${TIER_ICONS[i]} Tier ${i + 1}</button>`).join("")
   + `<button type="button" class="ptier" data-t="all" style="--ta:#ffcf4a" aria-pressed="false">👑 All 50</button>`;
+refreshLockUI();
 function setMode(m){
   S.mode = m;
   document.querySelectorAll(".mode-btn").forEach(b => b.setAttribute("aria-pressed", b.dataset.mode === m));
@@ -3134,33 +3145,60 @@ $("#pTiers").addEventListener("click", e => {
 /* =====================================================================
    INPUT + BOOT
    ===================================================================== */
-$("#nameForm").addEventListener("submit", e => {
+$("#nameForm").addEventListener("submit", async e => {
   e.preventDefault();
   const n = $("#nameInput").value.trim();
   if(!n){ $("#nameErr").textContent = "Please enter your name so it appears on your report."; $("#nameInput").focus(); return; }
   $("#nameErr").textContent = "";
   S.name = n;
+  const sb = $("#startBtn"); if(sb.disabled) return;
+  sb.disabled = true;
+  await S.unlocking;
+  sb.disabled = false;
   startRun(S.mode === "practice");
 });
 document.querySelectorAll(".choice, .door").forEach(el => el.addEventListener("click", () => choose(+el.dataset.side)));
-$("#muteBtn").addEventListener("click", () => { S.sound = !S.sound; $("#muteBtn").textContent = S.sound ? "🔊" : "🔇"; });
+$("#muteBtn").addEventListener("click", () => {
+  S.sound = !S.sound; $("#muteBtn").textContent = S.sound ? "🔊" : "🔇"; $("#muteBtn").setAttribute("aria-pressed", !S.sound);
+  if(master && ac){ master.gain.cancelScheduledValues(ac.currentTime); master.gain.setValueAtTime(S.sound ? 1 : 0, ac.currentTime); }
+});
 document.addEventListener("keydown", e => {
+  if(e.ctrlKey || e.metaKey || e.altKey) return;
+  if($("#lockOverlay").classList.contains("show")){ if(e.key === "Escape") $("#lockBack").click(); return; }
   if(e.target.tagName === "INPUT" || $("#cine").classList.contains("show")) return;
   if($("#shopOverlay").classList.contains("show")){ if(e.key === "Escape") closeShop(); return; }
   if($("#worldOverlay").classList.contains("show")){
+    if(e.repeat){ e.preventDefault(); return; }
     if(e.target.tagName === "BUTTON" && e.target.id !== "wGo") return;
     if(e.key === "Enter" || e.key === " "){ e.preventDefault(); $("#wGo").click(); }
     if(e.key.toLowerCase() === "s") openShop();
     return;
   }
   if(!$("#screen-game").classList.contains("active")) return;
+  if(e.repeat && (e.key === "Enter" || e.key === " " || e.key === "ArrowRight")){ e.preventDefault(); return; }
   if(!$("#feedback").hidden){ if(e.target.tagName === "BUTTON" && e.target.id !== "fbNext") return; if(e.key === "Enter" || e.key === " " || e.key === "ArrowRight"){ e.preventDefault(); practiceNext(); } return; }
+  if(e.repeat) return;
   const k = e.key.toLowerCase();
+  if(performance.now() - (S.floorStart || 0) < 350 && (k === "a" || k === "b" || k === "1" || k === "2" || e.key === "ArrowLeft" || e.key === "ArrowRight")) return;
   if(k === "a" || k === "1" || e.key === "ArrowLeft"){ e.preventDefault(); choose(0); }
   if(k === "b" || k === "2" || e.key === "ArrowRight"){ e.preventDefault(); choose(1); }
   if(k === "s") openShop();
 });
 window.addEventListener("resize", () => { if(!S.busy) $("#hero").style.removeProperty("--dx"); });
+
+// Back button / two-finger swipe / refresh in the middle of a climb would wipe it, so ask first
+const midClimb = () => $("#screen-game").classList.contains("active") || $("#cine").classList.contains("show");
+window.addEventListener("popstate", () => {
+  if(!midClimb()) return;
+  history.pushState({climb:1}, "");
+  // mid-animation (a door opening, the climb scene) the game is busy: just stay put
+  if(S.busy || $("#cine").classList.contains("show") || $("#shopOverlay").classList.contains("show")) return;
+  if(confirm("Leave your climb? Your progress will be lost.")){
+    ["#worldOverlay","#shopOverlay","#lockOverlay"].forEach(o => $(o).classList.remove("show")); $("#app").inert = false;
+    if(S.practice) practiceSummary(); else { document.body.dataset.world = 1; show("screen-title"); }
+  }
+});
+window.addEventListener("beforeunload", e => { if(midClimb()){ e.preventDefault(); e.returnValue = ""; } });
 
 PFX.cv = $("#pfx"); PFX.ctx = PFX.cv.getContext("2d");
 if(window.ResizeObserver) new ResizeObserver(pfxResize).observe($("#stage")); else window.addEventListener("resize", pfxResize);
@@ -3175,7 +3213,8 @@ function startTitleBg(){
 function titleLoop(now){
   if(!document.body.classList.contains("on-title")){ TB.run = false; return; }
   requestAnimationFrame(titleLoop);
-  if(document.hidden) return;
+  if(document.hidden || now - (TB.last || 0) < 33) return;
+  TB.last = now;
   if(C.cv !== TB.cv){ C.cv = TB.cv; C.ctx = TB.ctx; cineSize(); }
   const u = (now % 80000) / 80000, k = (1 - Math.cos(u * Math.PI * 2)) / 2;
   const s = C.W < 700 ? .56 : .66;
